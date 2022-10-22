@@ -32,7 +32,6 @@ public class CourseControllerImpl implements CourseController {
         Result r = new Result();
         // 1、 从token获取用户ID， 从Body中获取cid
         Long uid = JWT.getUid(token);
-        System.out.println("uid = " + uid + "\ncid = " + cid);
         // 2、检验用户ID、Cid合法性(是否存在)
         if(!(userService.isUserExist(uid) && courseService.isCourseExist(cid))){
             r.setCode(Code.addCourse_Fail_cidErr);

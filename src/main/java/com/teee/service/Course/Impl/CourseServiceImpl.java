@@ -50,7 +50,9 @@ public class CourseServiceImpl implements CourseService {
                     uids.add(Long.valueOf(s.trim()));
                 }
             }
-            uids.add(Long.valueOf(uid));
+            if(!uids.contains(uid)){
+                uids.add(Long.valueOf(uid));
+            }
             courseUser.setUid(uids.toString());
             System.out.println(courseUser);
             if(new_ == 1){
@@ -81,7 +83,9 @@ public class CourseServiceImpl implements CourseService {
                     cids.add(Integer.valueOf(s.trim()));
                 }
             }
-            cids.add(cid);
+            if(!cids.contains(cid)){
+                cids.add(cid);
+            }
             userCourse.setCid(cids.toString());
             if(new_ == 1){
                 userCourseDao.insert(userCourse);
