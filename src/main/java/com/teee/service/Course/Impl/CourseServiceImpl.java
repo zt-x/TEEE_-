@@ -54,7 +54,6 @@ public class CourseServiceImpl implements CourseService {
                 uids.add(Long.valueOf(uid));
             }
             courseUser.setUid(uids.toString());
-            System.out.println(courseUser);
             if(new_ == 1){
                 courseUserDao.insert(courseUser);
             }else{

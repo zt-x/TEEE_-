@@ -42,7 +42,7 @@ public class PowerServiceImpl implements PowerService {
             routers.add(rf.getRouterObject("我是Admin", "/CourseAdmin", "CourseView.vue", "fa fa-camera"));
             routers.add(rf.getRouterObject("Admin特有的统计数据", "/StatisticsAdmin", "StatisticsView.vue", "fa fa-camera"));
         }else if("student".equals(role)){
-            routers.add(rf.getRouterObject("我的课程", "/CourseController", "CourseView.vue", "fas fa fa-list-alt"));
+            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt"));
             routers.add(rf.getRouterObject("统计数据", "/Statistics", "StatisticsView.vue", "fas fa-bar-chart"));
         }else if("teacher".equals(role)){
 

@@ -29,7 +29,6 @@ public class MyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest hsr = (HttpServletRequest) servletRequest;
-        System.out.println(hsr.getRequestURI());
         servletRequest.setCharacterEncoding("UTF-8");
         if(check(hsr.getRequestURI())){
             filterChain.doFilter(servletRequest, servletResponse);
