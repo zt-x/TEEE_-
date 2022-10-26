@@ -125,7 +125,7 @@ public class CourseServiceImpl implements CourseService {
                 course = courseDao.selectById(Integer.valueOf(cid));
                 course_json = (JSONObject) JSONObject.toJSON(course);
                 course_json.put("Name", course.getCourseName());
-                course_json.put("id", course.getCourseName());
+                course_json.put("id", course.getId());
                 course_json.put("TeacherName", userInfoDao.selectById(course.getTid()).getUsername());
                 course_json.put("College", course.getCollege());
                 course_json.put("Time", course.getStartTime() + " - " + course.getEndTime());
@@ -147,7 +147,7 @@ public class CourseServiceImpl implements CourseService {
             course = courseDao.selectById(cid);
             course_json = (JSONObject) JSONObject.toJSON(course);
             course_json.put("Name", course.getCourseName());
-            course_json.put("id", course.getCourseName());
+            course_json.put("id", course.getId());
             course_json.put("TeacherName", userInfoDao.selectById(course.getTid()).getUsername());
             course_json.put("College", course.getCollege());
             course_json.put("Time", course.getStartTime() + " - " + course.getEndTime());

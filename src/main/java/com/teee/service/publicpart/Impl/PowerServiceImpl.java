@@ -38,13 +38,18 @@ public class PowerServiceImpl implements PowerService {
         RouterFactory rf = new RouterFactory();
         ArrayList<JSONObject> routers = new ArrayList<>();
         if("admin".equals(role)){
-            routers.add(rf.getRouterObject("我是Admin", "/CourseAdmin", "CourseView.vue", "fa fa-camera"));
-            routers.add(rf.getRouterObject("Admin特有的统计数据", "/StatisticsAdmin", "StatisticsView.vue", "fa fa-camera"));
+            routers.add(rf.getRouterObject("我是Admin", "/CourseAdmin", "CourseView.vue", "fa fa-camera", true));
+            routers.add(rf.getRouterObject("Admin特有的统计数据", "/StatisticsAdmin", "StatisticsView.vue", "fa fa-camera", true));
+            routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
+
         }else if("student".equals(role)){
-            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt"));
-            routers.add(rf.getRouterObject("统计数据", "/Statistics", "StatisticsView.vue", "fas fa-bar-chart"));
+            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt", true));
+            routers.add(rf.getRouterObject("统计数据", "/Statistics", "StatisticsView.vue", "fas fa-bar-chart", true));
+            routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
         }else if("teacher".equals(role)){
-            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt"));
+            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt", true));
+            routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
+
         }
         return routers;
     }
