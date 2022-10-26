@@ -1,5 +1,6 @@
 package com.teee.controller.student.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.teee.config.Code;
 import com.teee.controller.student.CourseController;
 import com.teee.domain.Result;
@@ -11,10 +12,12 @@ import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
 @Controller
+@Transactional(rollbackFor = Exception.class)
 public class CourseControllerImpl implements CourseController {
 
     @Autowired
@@ -23,10 +26,9 @@ public class CourseControllerImpl implements CourseController {
     @Autowired
     UserServiceImpl userService;
 
-//    CourseService courseService = (CourseService)SpringBeanUtil.getBean(CourseService.class);
-//    UserService userService = (UserService) SpringBeanUtil.getBean(UserService.class);
-
+    @Override
     @RequestMapping("/Course/addCourse")
+
     @ResponseBody
     public Result addCourse(@RequestHeader("Authorization") String token, @RequestParam("cid") int cid) {
         Result r = new Result();
@@ -54,6 +56,23 @@ public class CourseControllerImpl implements CourseController {
             return r;
         }
 
+        return r;
+    }
+
+
+    @Override
+    @RequestMapping("/Course/getMyCoursesStu")
+    @ResponseBody
+    public Result getMyCourses(@RequestHeader("Authorization") String token) {
+        Result r = new Result();
+        // 1、 从token获取用户ID
+        Long uid = JWT.getUid(token);
+        // 2、查询
+        String s = JSON.toJSONString(courseService.getStuCourses(JWT.getUid(token)));
+        // 3、装配r
+        r.setMsg("success");
+        r.setCode(Code.Suc);
+        r.setData(s);
         return r;
     }
 }

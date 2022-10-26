@@ -1,8 +1,11 @@
 package com.teee;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.teee.dao.CourseDao;
 import com.teee.dao.LoginDao;
 import com.teee.dao.UserInfoDao;
+import com.teee.domain.Course;
+import com.teee.domain.TeacherCourse;
 import com.teee.domain.UserInfo;
 import com.teee.service.Course.CourseService;
 import com.teee.service.Course.Impl.CourseServiceImpl;
@@ -41,20 +44,17 @@ public class Test {
         PowerServiceImpl powerService = SpringBeanUtil.getBean(PowerServiceImpl.class);
 
         String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIsInJvbGUiOiJzdHVkZW50IiwiZXhwIjoxNjY2NDUxMDUwLCJqdGkiOiI5Y2MwYjYwNi04NjliLTQyNjYtODhjZC1lMTZlOTgwNDM1MDEifQ.fn0S0PKk8bIbCW-O4WcK1DHnu7BUuHcvdbN_adh4La0";
-        System.out.println(powerService.getUser(token));
     }
 
     @org.junit.Test
     public void getRouter(){
         String role = "student";
-        System.out.println(new PowerServiceImpl().getRouter(role).toString());
     }
 
     //illegal Token
     @org.junit.Test
     public void CheckToken(){
         String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.dwadsadw.wafawds";
-        System.out.println(new PowerServiceImpl().isTokenLegal(token));
     }
 
 
@@ -62,12 +62,25 @@ public class Test {
 
     @org.junit.Test
     public void Test(){
-        System.out.println(courseService.addCourseToUser(2L, 1));
     }
 
     @org.junit.Test
     public void getUIDTest(){
-        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIsInJvbGUiOiJzdHVkZW50IiwiZXhwIjoxNjY2NDYwNDY4LCJqdGkiOiI4Y2M2NzM2Mi1mNWVmLTQ0NTUtOThhMC05N2Y3NmRjYTVhMWEifQ.qGHSYif2ZT8UjBpVoXhcGYapRYlnuD928-3ZbAWmpKo";
+        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInJvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjY2ODAxOTc0LCJqdGkiOiI5NGU5OTE4OS0yNTI0LTRmNjgtODI0OC02MDg4NWY1NmU3MjgifQ.Og0jADw0iQUfhorHCd82myP4YcnOJBptSGH3HIoQqwA";
         System.out.println(JWT.getUid(token));
     }
+
+
+    @Autowired
+    CourseDao courseDao;
+    @org.junit.Test
+    public void getCouse(){
+        System.out.println(courseService.getStuCourses(2l));
+    }
+
+    @org.junit.Test
+    public void getStuCourse(){
+        System.out.println(courseService.getStuCourses(2l));
+    }
+
 }

@@ -1,29 +1,43 @@
 package com.teee.service.Course.Impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teee.config.Code;
+import com.teee.dao.CourseDao;
 import com.teee.dao.CourseUserDao;
 import com.teee.dao.UserCourseDao;
+import com.teee.dao.UserInfoDao;
+import com.teee.domain.Course;
 import com.teee.domain.CourseUser;
+import com.teee.domain.TeacherCourse;
 import com.teee.domain.UserCourse;
 import com.teee.service.Course.CourseService;
+import com.teee.utils.SpringBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
     @Autowired
-    CourseUserDao courseUserDao;
+    private CourseUserDao courseUserDao;
     @Autowired
-    UserCourseDao userCourseDao;
+    private UserCourseDao userCourseDao;
 
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private UserInfoDao userInfoDao;
     @Override
     public boolean isCourseExist(int cid){
         try{
-            CourseUser cu = courseUserDao.selectById(cid);
+            Course cu = courseDao.selectById(cid);
             if(cu == null){
                 return false;
             }
@@ -75,7 +89,6 @@ public class CourseServiceImpl implements CourseService {
                 new_ = 1;
             }
             ArrayList<Integer> cids = new ArrayList<>();
-
             String[] split = userCourse.getCid().replace("[", "").replace("]", "").split(",");
             if(!split[0].equals("")){
                 for (String s : split) {
@@ -97,4 +110,54 @@ public class CourseServiceImpl implements CourseService {
         }
 
     }
+
+
+    @Override
+    public JSONArray getStuCourses(Long uid) {
+        JSONArray courses = new JSONArray();
+        Course course;
+        JSONObject course_json = new JSONObject();
+        try{
+            UserCourse userCourse = userCourseDao.selectById(uid);
+            String[] cids = userCourse.getCid().replace("[", "").replace("]", "").split(",");
+            for (String cid : cids) {
+                cid = cid.replaceAll(" ", "");
+                course = courseDao.selectById(Integer.valueOf(cid));
+                course_json = (JSONObject) JSONObject.toJSON(course);
+                course_json.put("Name", course.getCourseName());
+                course_json.put("id", course.getCourseName());
+                course_json.put("TeacherName", userInfoDao.selectById(course.getTid()).getUsername());
+                course_json.put("College", course.getCollege());
+                course_json.put("Time", course.getStartTime() + " - " + course.getEndTime());
+                course_json.put("IMG", course.getBanner());
+                course_json.put("status", course.getStatus());
+                courses.add(course_json);
+            }
+        }catch(NullPointerException npe){
+        }
+        return courses;
+    }
+
+    @Override
+    public JSONArray getTeaCourses(Long tid) {
+        JSONArray courses = new JSONArray();
+        Course course;
+        JSONObject course_json;
+        for (Integer cid : courseDao.getCidByTid(tid)) {
+            course = courseDao.selectById(cid);
+            course_json = (JSONObject) JSONObject.toJSON(course);
+            course_json.put("Name", course.getCourseName());
+            course_json.put("id", course.getCourseName());
+            course_json.put("TeacherName", userInfoDao.selectById(course.getTid()).getUsername());
+            course_json.put("College", course.getCollege());
+            course_json.put("Time", course.getStartTime() + " - " + course.getEndTime());
+            course_json.put("IMG", course.getBanner());
+            course_json.put("status", course.getStatus());
+            courses.add(course_json);
+        }
+        return courses;
+    }
+
+
+
 }

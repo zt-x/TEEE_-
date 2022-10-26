@@ -35,7 +35,6 @@ public class PowerServiceImpl implements PowerService {
 
     @Override
     public ArrayList<JSONObject> getRouter(String role) {
-//        String role = JWT.parse(token).get("role").toString();
         RouterFactory rf = new RouterFactory();
         ArrayList<JSONObject> routers = new ArrayList<>();
         if("admin".equals(role)){
@@ -45,7 +44,7 @@ public class PowerServiceImpl implements PowerService {
             routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt"));
             routers.add(rf.getRouterObject("统计数据", "/Statistics", "StatisticsView.vue", "fas fa-bar-chart"));
         }else if("teacher".equals(role)){
-
+            routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt"));
         }
         return routers;
     }

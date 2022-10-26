@@ -44,4 +44,12 @@ public class Result {
         this.msg = msg;
     }
 
+    @Override
+    public String toString() {
+        return "Result{" +
+                "data=" + data +
+                ", code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
 }
