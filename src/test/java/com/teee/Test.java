@@ -1,14 +1,16 @@
 package com.teee;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.teee.dao.CourseDao;
 import com.teee.dao.LoginDao;
 import com.teee.dao.UserInfoDao;
-import com.teee.domain.Course;
-import com.teee.domain.TeacherCourse;
+import com.teee.domain.Result;
 import com.teee.domain.UserInfo;
-import com.teee.service.Course.CourseService;
+import com.teee.domain.works.QuestionObject.FillInQuestion;
+import com.teee.domain.works.QuestionObject.QuestionObject;
 import com.teee.service.Course.Impl.CourseServiceImpl;
+import com.teee.service.HomeWork.QuestionManager;
 import com.teee.service.User.Impl.UserServiceImpl;
 import com.teee.service.publicpart.Impl.PowerServiceImpl;
 import com.teee.utils.JWT;
@@ -17,11 +19,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 
 @SpringBootTest(classes = TEEEApplication.class)
@@ -81,6 +78,46 @@ public class Test {
     @org.junit.Test
     public void getStuCourse(){
         System.out.println(courseService.getStuCourses(2l));
+    }
+
+    @org.junit.Test
+    public void jsonTest(){
+        Result rs = new Result();
+        Result rs2 = new Result();
+        rs.setData(new UserInfo());
+        rs.setCode(1235);
+        rs.setMsg("啦啦啦啦");
+        rs2.setData(new UserInfo());
+        rs2.setCode(66666);
+        rs2.setMsg("日日日日日");
+        JSONObject js = (JSONObject)JSONObject.toJSON(rs);
+        JSONObject js2 = (JSONObject)JSONObject.toJSON(rs2);
+        JSONArray ja = new JSONArray();
+        ja.add(js);
+        ja.add(js2);
+
+        String str_ja = ja.toString();
+        System.out.println(str_ja);
+
+        // 转回来
+
+        JSONArray jb = JSONArray.parseArray(str_ja);
+        System.out.println(jb);
+        JSONObject jbb = new JSONObject();
+        for (Object o : jb) {
+            jbb = (JSONObject)o;
+            System.out.println(jbb);
+        }
+    }
+    @org.junit.Test
+    public void QuestionManagerTest(){
+        FillInQuestion fillInQuestion = new FillInQuestion(1, 1.0F, "你好", "QuestionText");
+        FillInQuestion fillInQuestion2 = new FillInQuestion(1, 1.0F, "我是2", "QuestionText");
+        String s = QuestionManager.addQuestion("", fillInQuestion);
+        String s1 = QuestionManager.addQuestion(s, fillInQuestion2);
+        System.out.println(s);
+        System.out.println(s1);
+
     }
 
 }

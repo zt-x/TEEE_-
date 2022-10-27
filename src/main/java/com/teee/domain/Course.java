@@ -25,7 +25,6 @@ public class Course {
     Long tid;
 
     String college;
-    // banner为图片URL
     String banner;
 
     @TableField("start_time")
