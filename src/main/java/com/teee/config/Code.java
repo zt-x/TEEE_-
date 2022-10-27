@@ -28,4 +28,13 @@ public class Code {
     public static final Integer addCourse_Success = 20101;
     public static final Integer addCourse_Fail_cidErr = 20102;
 
+
+
+
+
+
+    public static final Integer BankType_choice_question = 30000;
+    public static final Integer BankType_fillin_question = 30001;
+    public static final Integer BankType_text_question = 30002;
+
 }

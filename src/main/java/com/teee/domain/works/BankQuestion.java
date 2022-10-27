@@ -20,7 +20,39 @@ import java.util.ArrayList;
 public class BankQuestion {
     @TableId(type = IdType.AUTO)
     private Integer bankId;
+
     private String bankName;
     private Integer bankType;
     private String questions;
+    private Long owner;
+    private String tags;
+
+    public BankQuestion(String bankName, Integer bankType, String questions, Long owner, String tags) {
+        this.bankName = bankName;
+        this.bankType = bankType;
+        this.questions = questions;
+        this.owner = owner;
+        this.tags = tags;
+    }
+
+    public BankQuestion(String bankName, Integer bankType, String questions, Long owner) {
+        this.bankName = bankName;
+        this.bankType = bankType;
+        this.questions = questions;
+        this.owner = owner;
+    }
+    public BankQuestion(String bankName, Integer bankType,Long owner) {
+        this.bankName = bankName;
+        this.bankType = bankType;
+        this.owner = owner;
+    }
+
+    public BankQuestion(Integer bankId, String bankName, Integer bankType, String questions, Long owner, String tags) {
+        this.bankId = bankId;
+        this.bankName = bankName;
+        this.bankType = bankType;
+        this.questions = questions;
+        this.owner = owner;
+        this.tags = tags;
+    }
 }

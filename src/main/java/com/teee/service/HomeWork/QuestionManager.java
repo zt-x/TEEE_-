@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teee.domain.works.QuestionObject.QuestionObject;
 
+/**
+ * @author Xu ZhengTao
+ */
 public class QuestionManager {
     public static String addQuestion(String origin, QuestionObject newQusetion){
         try{
@@ -19,7 +22,6 @@ public class QuestionManager {
             // 重新打包 JSONArray -> String
             return ja.toString();
         }catch (Exception e){
-//            e.printStackTrace();
             return null;
         }
     }
