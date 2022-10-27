@@ -69,16 +69,11 @@ public class QuestionBankServiceImpl implements QuestionBankService{
     @Override
     public BooleanReturn addBankTags(Integer bankId, ArrayList<String> tags) {
         try{
-            System.out.println(1);
             BankQuestion bankQuestion = bankQuestionDao.selectById(bankId);
-            System.out.println("2" + bankQuestion);
             ArrayList<String> origin = TypeChange.str_arrl(bankQuestion.getTags());
-            System.out.println("3" + origin.toString());
             origin.addAll(tags);
-            System.out.println("4" + origin.toString());
             bankQuestion.setTags(origin.toString());
             bankQuestionDao.updateById(bankQuestion);
-            System.out.println("5" + bankQuestion);
 
         }catch (Exception e){
             return BooleanReturn.rt(false, "addBankTags ERR: " + e.getMessage());
