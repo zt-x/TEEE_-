@@ -10,10 +10,10 @@ import java.util.List;
  * @author Xu ZhengTao
  */
 public interface WorkService {
-    BooleanReturn createWorkBank();
-    BooleanReturn deleteWorkBank();
-    BooleanReturn editWorksBank();
-    BankWork getWorkBankById();
-    List<BankWork> getWorkBankByOnwer();
-    BooleanReturn addBankTags();
+    BooleanReturn createWorkBank(String workName,String questions,Long owner);
+    BooleanReturn deleteWorkBank(Integer work_id);
+    BooleanReturn editWorksBank(BankWork bankWork);
+    BankWork getWorkBankById(Integer work_id);
+    List<BankWork> getWorkBankByOnwer(Long owner);
+    BooleanReturn addBankTags(Integer workId, ArrayList<String> tags);
 }

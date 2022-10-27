@@ -34,4 +34,12 @@ public class BankWork {
         this.workName = workName;
         this.owner = owner;
     }
+
+    public BankWork(String workName, String questions, Long owner, String tags) {
+        this.workName = workName;
+        this.questions = questions;
+        this.owner = owner;
+        this.tags = tags;
+    }
+
 }
