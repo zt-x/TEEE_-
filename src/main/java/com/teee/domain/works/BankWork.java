@@ -18,6 +18,8 @@ public class BankWork {
     private int workId;
     private String questions;
     private String workName;
+    private Long owner;
+    private String tags;
 
     public BankWork(String workName) {
         this.workName = workName;
@@ -26,5 +28,10 @@ public class BankWork {
     public BankWork(String questions, String workName) {
         this.questions = questions;
         this.workName = workName;
+    }
+
+    public BankWork(String workName, Long owner) {
+        this.workName = workName;
+        this.owner = owner;
     }
 }
