@@ -15,7 +15,7 @@ public class AWork {
     String workName;
     String deadline;
     Integer isExam;
-    Float totelScore;
+    Float totalScore;
 
 
 }
