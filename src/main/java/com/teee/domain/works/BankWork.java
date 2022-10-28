@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @TableName("bank_work")
 public class BankWork {
     @TableId(value="work_id", type = IdType.AUTO)
-    private int workId;
+    private Integer workId;
     private String questions;
     private String workName;
     private Long owner;

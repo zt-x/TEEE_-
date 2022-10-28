@@ -5,6 +5,7 @@ import com.teee.dao.BankWorkDao;
 import com.teee.domain.BooleanReturn;
 import com.teee.domain.works.BankQuestion;
 import com.teee.domain.works.BankWork;
+import com.teee.domain.works.SubmitWorkBank;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +75,10 @@ public class WorkServiceImpl implements WorkService{
             return BooleanReturn.rt(false,"deleteWorkBank Err: " + e.getMessage());
         }
         return BooleanReturn.rt(true);
+    }
+
+    @Override
+    public Float readOverWork(BankWork standardBankWork, SubmitWorkBank submitWorkBank) {
+        return null;
     }
 }
