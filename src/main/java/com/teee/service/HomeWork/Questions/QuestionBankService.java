@@ -1,6 +1,6 @@
 package com.teee.service.HomeWork.Questions;
 
-import com.teee.domain.BooleanReturn;
+import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.BankQuestion;
 
 import java.util.ArrayList;

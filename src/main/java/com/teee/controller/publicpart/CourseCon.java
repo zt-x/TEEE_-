@@ -3,7 +3,7 @@ package com.teee.controller.publicpart;
 import com.teee.config.Code;
 import com.teee.controller.student.CourseController;
 import com.teee.controller.teacher.TeacherCourseController;
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.utils.JWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -8,7 +8,7 @@ import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.dao.AWorkDao;
 import com.teee.dao.CourseDao;
 import com.teee.domain.Course;
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,6 +1,6 @@
 package com.teee.controller.publicpart.Work;
 
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 
 /**

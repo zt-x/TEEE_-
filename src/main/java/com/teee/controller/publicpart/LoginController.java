@@ -2,7 +2,7 @@ package com.teee.controller.publicpart;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.dao.LoginDao;
 import com.teee.domain.LoginData;
 import com.teee.utils.JWT;

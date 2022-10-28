@@ -2,10 +2,9 @@ package com.teee.service.HomeWork.Works;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.dao.BankWorkDao;
-import com.teee.domain.BooleanReturn;
-import com.teee.domain.works.BankQuestion;
+import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.BankWork;
-import com.teee.domain.works.SubmitWorkBank;
+import com.teee.domain.works.SubmitWork;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +77,7 @@ public class WorkServiceImpl implements WorkService{
     }
 
     @Override
-    public Float readOverWork(BankWork standardBankWork, SubmitWorkBank submitWorkBank) {
+    public Float readOverWork(BankWork standardBankWork, SubmitWork submitWork) {
         return null;
     }
 }

@@ -3,11 +3,10 @@ package com.teee.controller.publicpart;
 
 import com.teee.config.Code;
 import com.teee.dao.UserInfoDao;
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.dao.LoginDao;
 import com.teee.domain.LoginData;
 import com.teee.domain.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.teee.domain;
+package com.teee.domain.returnClass;
 
 public class Result {
     private Object data;

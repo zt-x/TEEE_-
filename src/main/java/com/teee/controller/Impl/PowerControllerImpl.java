@@ -2,7 +2,7 @@ package com.teee.controller.Impl;
 
 import com.teee.config.Code;
 import com.teee.controller.publicpart.PowerController;
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 import com.teee.service.publicpart.Impl.PowerServiceImpl;
 import com.teee.utils.SpringBeanUtil;
 import org.springframework.web.bind.annotation.*;

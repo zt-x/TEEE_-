@@ -2,7 +2,7 @@ package com.teee.service.HomeWork.Questions;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.dao.BankQuestionDao;
-import com.teee.domain.BooleanReturn;
+import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.BankQuestion;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;

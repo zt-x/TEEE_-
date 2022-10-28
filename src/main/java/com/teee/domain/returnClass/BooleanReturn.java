@@ -1,4 +1,4 @@
-package com.teee.domain;
+package com.teee.domain.returnClass;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.teee.controller.student;
 
-import com.teee.domain.Result;
+import com.teee.domain.returnClass.Result;
 
 /**
  * @author Xu ZhengTao
