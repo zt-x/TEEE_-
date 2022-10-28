@@ -2,15 +2,31 @@ package com.teee.service.HomeWork;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.teee.domain.returnClass.ReadOverWorkReturn;
-import com.teee.domain.works.SubmitWork;
+import com.teee.dao.CourseDao;
+import com.teee.utils.SpringBeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class ReadOverWork {
-    public static ReadOverWorkReturn AutoReadOverWork(SubmitWork submitWork){
-        // {总体情况:{userName: xxx, userId: uid, totalScore: xxxx, unReadOver: xxx}, 各个题目情况:[{score: ,autoFlag: 1},{},{} .....]}
-        JSONObject readOverWorkReturn = new JSONObject();
-        JSONObject totalStatus = new JSONObject();
-        JSONArray questionsStatus = new JSONArray();
 
+    public static String AutoReadOverWork(String submitWorkContent){
+        CourseDao courseDao = SpringBeanUtil.getBean(CourseDao.class);
+        //解析 Content
+        JSONArray content = JSONArray.parseArray(submitWorkContent);
+        JSONArray back = new JSONArray();
+        //自动批改 1、在题库中找到对应的题 2、比对答案 3、设置分数
+        int qid;
+        String ans;
+        float maxScore;
+        float score;
+        int readOver;
+        for (Object que : content) {
+            JSONObject que_bak = (JSONObject) que;
+            qid = (int) que_bak.get("QuestionId");
+            // 获取原题
+            courseDao.
+
+        }
+        //
     }
 }
