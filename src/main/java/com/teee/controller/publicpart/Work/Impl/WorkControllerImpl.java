@@ -29,7 +29,6 @@ public class WorkControllerImpl implements WorkController {
     @ResponseBody
     @RequestMapping("/Course/getAllWorksByCID")
     public Result getAllWorksByCID(@RequestParam("cid") int cid) {
-        System.out.println(cid);
         LambdaQueryWrapper<AWork> lqw = new LambdaQueryWrapper<>();
         lqw.eq(AWork::getCid, cid);
         List<AWork> aWorks = aWorkDao.selectList(lqw);
