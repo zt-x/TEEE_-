@@ -24,9 +24,10 @@ public class ReadOverWork {
             JSONObject que_bak = (JSONObject) que;
             qid = (int) que_bak.get("QuestionId");
             // 获取原题
-            courseDao.
+//            courseDao.
 
         }
         //
+    return null;
     }
 }

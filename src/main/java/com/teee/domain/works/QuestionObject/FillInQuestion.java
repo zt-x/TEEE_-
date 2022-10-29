@@ -1,5 +1,6 @@
 package com.teee.domain.works.QuestionObject;
 
+import com.teee.config.Code;
 import lombok.Data;
 
 
@@ -17,5 +18,6 @@ public class FillInQuestion extends QuestionObject{
     public FillInQuestion(int questionType, float questionScore, String questionText, String rightAnswer) {
         super(questionType, questionScore, questionText);
         this.rightAnswer = rightAnswer;
+        this.questionType = Code.BankType_fillin_question;
     }
 }
