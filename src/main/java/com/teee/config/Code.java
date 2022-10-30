@@ -30,11 +30,12 @@ public class Code {
 
 
 
-
-
-
     public static final Integer BankType_choice_question = 30000;
     public static final Integer BankType_fillin_question = 30001;
     public static final Integer BankType_text_question = 30002;
+
+    public static final Integer QueType_choice_question = 30010;
+    public static final Integer QueType_fillin_question = 30011;
+    public static final Integer QueType_text_question = 30012;
 
 }
