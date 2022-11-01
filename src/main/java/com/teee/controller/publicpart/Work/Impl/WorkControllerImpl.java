@@ -38,6 +38,7 @@ public class WorkControllerImpl implements WorkController {
             JSONObject jsonObject = (JSONObject) JSONObject.toJSON(aWork);
             jsonArray.add(jsonObject);
         }
+        System.out.println(jsonArray);
         return new Result(Code.Suc, jsonArray, "获取成功");
     }
 

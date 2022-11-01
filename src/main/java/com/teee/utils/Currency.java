@@ -1,5 +1,6 @@
 package com.teee.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.teee.domain.LoginData;
 
 import java.util.ArrayList;
@@ -22,4 +23,10 @@ public class Currency {
 //        }
 //
 //    }
+    public static String arr2str(JSONArray jarr){
+        String str = new String();
+        ArrayList<String> as = new ArrayList<>(jarr);
+        System.out.println(as);
+        return as.toString();
+    }
 }
