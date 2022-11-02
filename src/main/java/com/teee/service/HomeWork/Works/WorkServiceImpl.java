@@ -20,9 +20,9 @@ public class WorkServiceImpl implements WorkService{
     @Autowired
     BankWorkDao bankWorkDao;
     @Override
-    public BooleanReturn createWorkBank(String workName, String questions, Long owner) {
+    public BooleanReturn createWorkBank(String workName, String questions, Long owner, Integer isTemp) {
         try {
-            BankWork bankWork = new BankWork(workName,questions,owner,"[]");
+            BankWork bankWork = new BankWork(workName,questions,owner,"[]", isTemp);
             bankWorkDao.insert(bankWork);
         }catch (Exception e){
             return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());

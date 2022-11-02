@@ -16,7 +16,7 @@ public class AWork {
     String deadline;
     Integer isExam;
     Float totalScore;
-    Integer autoReadoverOnsubmit;
-
+    Integer autoReadoverChoice;
+    Integer autoReadoverFillIn;
 
 }

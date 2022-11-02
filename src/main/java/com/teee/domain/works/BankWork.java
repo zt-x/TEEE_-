@@ -21,13 +21,16 @@ public class BankWork {
     private Long owner;
     private String tags;
 
+    private Integer isTemp;
+
     public BankWork(String workName) {
         this.workName = workName;
     }
 
-    public BankWork(String questions, String workName) {
+    public BankWork(String questions, String workName, Integer isTemp) {
         this.questions = questions;
         this.workName = workName;
+        this.isTemp = isTemp;
     }
 
     public BankWork(String workName, Long owner) {
@@ -35,11 +38,14 @@ public class BankWork {
         this.owner = owner;
     }
 
-    public BankWork(String workName, String questions, Long owner, String tags) {
+    public BankWork(String workName, String questions, Long owner, String tags, Integer isTemp) {
         this.workName = workName;
         this.questions = questions;
         this.owner = owner;
         this.tags = tags;
+        this.isTemp = isTemp;
     }
+
+
 
 }

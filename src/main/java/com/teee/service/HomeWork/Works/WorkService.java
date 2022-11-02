@@ -11,7 +11,7 @@ import java.util.List;
  * @author Xu ZhengTao
  */
 public interface WorkService {
-    BooleanReturn createWorkBank(String workName,String questions,Long owner);
+    BooleanReturn createWorkBank(String workName,String questions,Long owner, Integer isTemp);
     BooleanReturn deleteWorkBank(Integer work_id);
     BooleanReturn editWorksBank(BankWork bankWork);
     BankWork getWorkBankById(Integer work_id);
