@@ -39,7 +39,6 @@ public class TeacherCourseControllerImpl implements TeacherCourseController {
         Result r = new Result();
         // 1、 从token获取用户ID， 从Body中获取cid
         Long tid = JWT.getUid(token);
-        System.out.println("uid=" + tid);
         // 2、检验用户ID合法性(是否存在)
         if(!(userService.isUserExist(tid))){
             r.setCode(Code.addCourse_Fail_cidErr);

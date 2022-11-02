@@ -1,5 +1,7 @@
 package com.teee.utils;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,5 +16,10 @@ public class TypeChange {
             return arrayList;
         }
 
+    }
+    public static String arr2str(JSONArray jarr){
+        String str = new String();
+        ArrayList<String> as = new ArrayList<>(jarr);
+        return as.toString();
     }
 }

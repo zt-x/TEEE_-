@@ -14,19 +14,4 @@ public class Currency {
         return new LoginData(uid, pwd, role);
     }
 
-//    public static <T> ArrayList<T> str2ArrList(String str, T t){
-//        ArrayList<T> arr = new ArrayList<>();
-//        str.replace("[", "").replace("]", "");
-//        String[] split = str.split(",");
-//        for (String s : split) {
-//            arr.add((T) Long.valueOf(s));
-//        }
-//
-//    }
-    public static String arr2str(JSONArray jarr){
-        String str = new String();
-        ArrayList<String> as = new ArrayList<>(jarr);
-        System.out.println(as);
-        return as.toString();
-    }
 }

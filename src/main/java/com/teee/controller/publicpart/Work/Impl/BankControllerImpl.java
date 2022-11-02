@@ -1,20 +1,20 @@
 package com.teee.controller.publicpart.Work.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.BankController;
 import com.teee.dao.BankQuestionDao;
+import com.teee.dao.BankWorkDao;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.BankQuestion;
+import com.teee.domain.works.BankWork;
 import com.teee.utils.JWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,9 @@ public class BankControllerImpl implements BankController {
 
     @Autowired
     BankQuestionDao bankQuestionDao;
+
+    @Autowired
+    BankWorkDao bankWorkDao;
 
     @Override
     @RequestMapping("/Bank/getQueBankByTid")
@@ -58,5 +61,25 @@ public class BankControllerImpl implements BankController {
             res.setData(null);
         }
         return res;
+    }
+
+    @Override
+    @RequestMapping("/Bank/addWorkBank")
+    @ResponseBody
+    public Result addWorkBank(@RequestHeader("Authorization") String token, @RequestBody BankWork bankWork) {
+        Long tid = JWT.getUid(token);
+        Result r = new Result();
+        bankWork.setOwner(tid);
+        try{
+            bankWorkDao.insert(bankWork);
+            r.setCode(Code.Suc);
+            r.setData(bankWork.getWorkId());
+            r.setMsg("添加成功");
+        }catch(Exception e){
+            r.setCode(Code.ERR);
+            r.setData(null);
+            r.setMsg("添加失败");
+        }
+        return r;
     }
 }

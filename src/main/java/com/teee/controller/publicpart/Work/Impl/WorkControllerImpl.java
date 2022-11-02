@@ -10,6 +10,7 @@ import com.teee.dao.CourseDao;
 import com.teee.domain.Course;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
+import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,7 @@ public class WorkControllerImpl implements WorkController {
             JSONObject jsonObject = (JSONObject) JSONObject.toJSON(aWork);
             jsonArray.add(jsonObject);
         }
-        System.out.println(jsonArray);
+        System.out.println("jA:" + jsonArray.toString());
         return new Result(Code.Suc, jsonArray, "获取成功");
     }
 

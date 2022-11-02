@@ -17,7 +17,6 @@ public class ControllerTest {
     public void getQueBankByTid(){
         BankController bankController = SpringBeanUtil.getBean(BankController.class);
         Result res = bankController.getQueBankByTid("eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInJvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjY3Mzg2NjEyLCJqdGkiOiJjOGFlNDUxZi02NGFmLTQ1YzItYjhmMy0zYTQ0YTMwOGY1ZWIifQ.5j3Ju99jJGX4I5zJ4v0PCow9GH_zS-ZiGhdt2TxGBBo");
-        System.out.println(res);
 
     }
 }
