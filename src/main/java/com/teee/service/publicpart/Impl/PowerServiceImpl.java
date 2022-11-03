@@ -48,6 +48,7 @@ public class PowerServiceImpl implements PowerService {
         }else if("teacher".equals(role)){
             routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt", true));
             routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
+            routers.add(rf.getRouterObject("WorkContent", "/WorkContent", "Course/AWorkContent.vue", "", false));
             routers.add(rf.getRouterObject("作业库/题库管理", "/BankManager", "BankManagerView.vue", "fa fa-university", true));
         }
         return routers;
