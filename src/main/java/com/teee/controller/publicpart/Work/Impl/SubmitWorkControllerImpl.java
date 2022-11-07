@@ -2,28 +2,43 @@ package com.teee.controller.publicpart.Work.Impl;
 
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.SubmitWorkController;
+import com.teee.dao.SubmitWorkContentDao;
+import com.teee.dao.UserInfoDao;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.SubmitWork;
+import com.teee.domain.works.SubmitWorkContent;
 import com.teee.service.HomeWork.SubmitService;
+import com.teee.utils.JWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
 public class SubmitWorkControllerImpl implements SubmitWorkController {
-
     @Autowired
     SubmitService submitService;
+
+
+    @Autowired
+    SubmitWorkContentDao submitWorkContentDao;
 
     @Override
     @RequestMapping("/submit/submitWork")
     @ResponseBody
-    public Result SubmitWork(@RequestBody SubmitWork submitWork) {
+
+    public Result SubmitWork(@RequestHeader("Authorization") String token, @RequestParam("wid") int wid, @RequestParam("ans") String ans) {
         Result res = new Result();
+        SubmitWorkContent submitWorkContent = new SubmitWorkContent();
+        submitWorkContent.setSubmitContent(ans);
+        submitWorkContentDao.insert(submitWorkContent);
+        Integer submitId = submitWorkContent.getSubmitId();
+        SubmitWork submitWork = new SubmitWork();
+        Long uid = JWT.getUid(token);
+        submitWork.setUid(uid);
+        submitWork.setWorkTableId(wid);
+        submitWork.setScore(0F);
+        submitWork.setSubmitId(submitId);
         try{
             if (submitService.submitWork(submitWork)) {
                 res.setCode(Code.Suc);

@@ -16,14 +16,18 @@ public class SubmitWork {
     Integer workTableId;
     Integer finishReadOver;
     Float score;
-    String ans;
+    Integer submitId;
 
-    public SubmitWork(Long uid, String username, Integer workTableId, Integer finishReadOver, Float score, String ans) {
+    public SubmitWork(Long uid, String username, Integer workTableId, Integer finishReadOver, Float score, int ans) {
         this.uid = uid;
         this.username = username;
         this.workTableId = workTableId;
         this.finishReadOver = finishReadOver;
         this.score = score;
-        this.ans = ans;
+        this.submitId = ans;
+    }
+
+    public SubmitWork() {
+
     }
 }
