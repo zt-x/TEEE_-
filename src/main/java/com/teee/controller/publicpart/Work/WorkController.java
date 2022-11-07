@@ -9,4 +9,5 @@ import com.teee.domain.works.AWork;
 public interface WorkController {
     Result getAllWorksByCID(int cid);
     Result ReleaseAWork(AWork aWork);
+    Result getWork(int id);
 }
