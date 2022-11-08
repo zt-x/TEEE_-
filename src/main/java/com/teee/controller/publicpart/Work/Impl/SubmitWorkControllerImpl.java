@@ -29,6 +29,7 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
 
     public Result SubmitWork(@RequestHeader("Authorization") String token, @RequestParam("wid") int wid, @RequestParam("ans") String ans) {
         Result res = new Result();
+        System.out.println(ans);
         SubmitWorkContent submitWorkContent = new SubmitWorkContent();
         submitWorkContent.setSubmitContent(ans);
         submitWorkContent.setReadover("");

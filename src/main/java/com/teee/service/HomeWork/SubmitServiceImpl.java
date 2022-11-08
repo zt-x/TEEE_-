@@ -68,7 +68,7 @@ public class SubmitServiceImpl implements SubmitService{
         SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(submitId);
         ArrayList<String> readOver;
         ArrayList<String> submitContent = TypeChange.str2arrl(submitWorkContent.getSubmitContent());
-
+        System.out.println("subContent = " + submitContent);
         String readover = submitWorkContent.getReadover();
         if(readover.equals("")){
             int len = SubmitWork.getNumOfQue(sw);
@@ -76,6 +76,7 @@ public class SubmitServiceImpl implements SubmitService{
             for(int i=0; i<len; i++){
                 readOver.add(i,"");
             }
+            System.out.println(readOver);
         }else {
             readOver = TypeChange.str2arrl(readover);
         }
@@ -91,23 +92,34 @@ public class SubmitServiceImpl implements SubmitService{
                 if (jo.get("qtype").equals(Code.QueType_choice_question)) {
                     Float score = -1f;
                     ArrayList<String> cans = TypeChange.str2arrl(jo.get("cans").toString());
-                    ArrayList<String> ans = TypeChange.str2arrl((String) submitContent.get(i));
+                    System.out.println("subContent i " + submitContent.get(i));
+                    ArrayList<String> ans = TypeChange.str2arrl(submitContent.get(i));
                     //cans 是正确答案
                     //ans 是学生提交的答案
                     //ans中 出现 不属于cans 的 ，则0分，否则满分
+                    System.out.println("cans: " + cans);
+                    System.out.println("ans: " + ans);
+                    boolean isErr = false;
                     for (String an : ans) {
                         if (!cans.contains(an)) {
                             score = 0f;
+                            isErr = true;
                         } else {
                             score = qscore;
                         }
                     }
-                    if (ans.size() == cans.size()) {
-                        score = qscore;
-                    } else {
-                        // 拿一半分
-                        score = Float.valueOf(String.valueOf(qscore * 0.5));
+                    System.out.println("ans的size:" + ans.size());
+                    System.out.println("cans的size:" + cans.size());
+                    if(!isErr){
+                        if (ans.size() == cans.size()) {
+                            score = qscore;
+                        } else {
+                            // 拿一半分
+                            score = Float.valueOf(String.valueOf(qscore * 0.5));
+                            System.out.println("对一半");
+                        }
                     }
+                    System.out.println("批改后的分数： " + score);
                     readOver.set(i,String.valueOf(score));
                 }
                 // 填空题

@@ -12,7 +12,7 @@ public class TypeChange {
             return new ArrayList<>();
         }else{
             return new ArrayList<>(Arrays.asList(
-                    str.substring(1, str.length() - 1).split(", ")
+                    str.substring(1, str.length() - 1).split(",")
             ));
         }
     }

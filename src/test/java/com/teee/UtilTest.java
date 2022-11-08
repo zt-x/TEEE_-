@@ -18,7 +18,8 @@ public class UtilTest {
         arr.add("null");
         String str = arr.toString();
         ArrayList<String> arrayList = TypeChange.str2arrl(str);
-        arrayList.add("666");
+//        arrayList.add("666");
+        System.out.println(arrayList.size());
         System.out.println(arrayList);
     }
 }
