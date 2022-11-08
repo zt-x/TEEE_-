@@ -1,6 +1,7 @@
 package com.teee.serviceTest;
 
 import com.teee.TEEEApplication;
+import com.teee.dao.SubmitWorkDao;
 import com.teee.domain.works.SubmitWork;
 import com.teee.service.HomeWork.SubmitService;
 import com.teee.service.HomeWork.SubmitServiceImpl;
@@ -15,8 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SubmitTest {
     @Test
     public void autoReadOverTest(){
-        SubmitWork submitWork = new SubmitWork();
-//        submitWork.s
-//        SubmitServiceImpl.autoReadOver()
+        SubmitWorkDao bean = SpringBeanUtil.getBean(SubmitWorkDao.class);
+        SubmitWork submitWork = bean.selectById(1);
+        SubmitWork submitWork1 = SubmitServiceImpl.autoReadOver(submitWork, true, true);
+        System.out.println(submitWork1);
     }
 }

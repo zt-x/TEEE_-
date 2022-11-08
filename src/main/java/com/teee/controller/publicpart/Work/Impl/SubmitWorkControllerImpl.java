@@ -31,6 +31,8 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
         Result res = new Result();
         SubmitWorkContent submitWorkContent = new SubmitWorkContent();
         submitWorkContent.setSubmitContent(ans);
+        submitWorkContent.setReadover("");
+        submitWorkContent.setFinishReadOver(0);
         submitWorkContentDao.insert(submitWorkContent);
         Integer submitId = submitWorkContent.getSubmitId();
         SubmitWork submitWork = new SubmitWork();

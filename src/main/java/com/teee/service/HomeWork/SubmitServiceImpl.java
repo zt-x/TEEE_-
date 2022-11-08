@@ -2,7 +2,7 @@ package com.teee.service.HomeWork;
 
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.teee.config.Code;
 import com.teee.dao.*;
 import com.teee.domain.UserInfo;
@@ -71,21 +71,26 @@ public class SubmitServiceImpl implements SubmitService{
 
         String readover = submitWorkContent.getReadover();
         if(readover.equals("")){
-            readOver = new ArrayList<>(SubmitWork.getNumOfQue(sw));
+            int len = SubmitWork.getNumOfQue(sw);
+            readOver = new ArrayList<>(len);
+            for(int i=0; i<len; i++){
+                readOver.add(i,"");
+            }
         }else {
             readOver = TypeChange.str2arrl(readover);
         }
+        System.out.println("size="+readOver.size());
         JSONArray workCotent = SubmitWork.getWorkCotent(sw);
         JSONObject jo;
         if (workCotent != null) {
             for (int i=0;i<workCotent.size();i++) {
                 jo = (JSONObject) workCotent.get(i);
-                Float qscore = (Float) jo.get("qscore");
+                Float qscore = Float.valueOf(jo.get("qscore").toString());
 
                 // 选择题
                 if (jo.get("qtype").equals(Code.QueType_choice_question)) {
                     Float score = -1f;
-                    ArrayList<String> cans = TypeChange.str2arrl((String) jo.get("cans"));
+                    ArrayList<String> cans = TypeChange.str2arrl(jo.get("cans").toString());
                     ArrayList<String> ans = TypeChange.str2arrl((String) submitContent.get(i));
                     //cans 是正确答案
                     //ans 是学生提交的答案
@@ -119,7 +124,12 @@ public class SubmitServiceImpl implements SubmitService{
                 }
             }
             submitWorkContent.setReadover(TypeChange.arrL2str(readOver));
-            submitWorkContentDao.updateById(submitWorkContent);
+            try{
+                submitWorkContentDao.updateById(submitWorkContent);
+                return submitWork;
+            }catch (Exception e){
+                return null;
+            }
         }else{
             System.out.println("WorkCointent为null");
         }
