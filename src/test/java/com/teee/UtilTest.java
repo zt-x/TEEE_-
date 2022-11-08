@@ -1,5 +1,6 @@
 package com.teee;
 
+import com.teee.domain.SpecialArray;
 import com.teee.utils.TypeChange;
 import org.junit.Test;
 
@@ -21,5 +22,19 @@ public class UtilTest {
 //        arrayList.add("666");
         System.out.println(arrayList.size());
         System.out.println(arrayList);
+    }
+
+
+    @Test
+    public void ArrayList2SpecialArrayTest(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("数据一");
+        arrayList.add("数据二");
+        arrayList.add("数据三");
+        arrayList.add("数据四");
+        arrayList.add("数据五");
+        SpecialArray s = SpecialArray.ArrayList2SpecialArray(arrayList, "-!!!!!!!!!-");
+        System.out.println("s=" + s);
+        System.out.println("s.size = " + s.size());
     }
 }

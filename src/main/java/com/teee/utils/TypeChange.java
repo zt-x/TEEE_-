@@ -7,12 +7,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TypeChange {
+    public static ArrayList<String> str2arrl(String str, String sep){
+        if ("".equals(str) || "[]".equals(str) || str == null){
+            return new ArrayList<>();
+        }else{
+            return new ArrayList<>(Arrays.asList(
+                    str.substring(1, str.length() - 1).split(sep)
+            ));
+        }
+    }
     public static ArrayList<String> str2arrl(String str){
         if ("".equals(str) || "[]".equals(str) || str == null){
             return new ArrayList<>();
         }else{
             return new ArrayList<>(Arrays.asList(
-                    str.substring(1, str.length() - 1).split(",")
+                    str.substring(1, str.length() - 1).split(", ")
             ));
         }
     }

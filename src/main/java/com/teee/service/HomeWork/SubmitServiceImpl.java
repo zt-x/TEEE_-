@@ -62,7 +62,6 @@ public class SubmitServiceImpl implements SubmitService{
     public static SubmitWork autoReadOver(SubmitWork submitWork, boolean readChoice, boolean readFillIn) {
         SubmitWorkContentDao submitWorkContentDao = SpringBeanUtil.getBean(SubmitWorkContentDao.class);
         BankWorkDao bankWorkDao = SpringBeanUtil.getBean(BankWorkDao.class);
-
         SubmitWork sw = submitWork;
         Integer submitId = sw.getSubmitId();
         SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(submitId);
@@ -87,18 +86,14 @@ public class SubmitServiceImpl implements SubmitService{
             for (int i=0;i<workCotent.size();i++) {
                 jo = (JSONObject) workCotent.get(i);
                 Float qscore = Float.valueOf(jo.get("qscore").toString());
-
                 // 选择题
                 if (jo.get("qtype").equals(Code.QueType_choice_question)) {
                     Float score = -1f;
-                    ArrayList<String> cans = TypeChange.str2arrl(jo.get("cans").toString());
-                    System.out.println("subContent i " + submitContent.get(i));
-                    ArrayList<String> ans = TypeChange.str2arrl(submitContent.get(i));
+                    ArrayList<String> cans = TypeChange.str2arrl(jo.get("cans").toString(), ",");
+                    ArrayList<String> ans = TypeChange.str2arrl(submitContent.get(i), ",");
                     //cans 是正确答案
                     //ans 是学生提交的答案
                     //ans中 出现 不属于cans 的 ，则0分，否则满分
-                    System.out.println("cans: " + cans);
-                    System.out.println("ans: " + ans);
                     boolean isErr = false;
                     for (String an : ans) {
                         if (!cans.contains(an)) {
@@ -108,24 +103,28 @@ public class SubmitServiceImpl implements SubmitService{
                             score = qscore;
                         }
                     }
-                    System.out.println("ans的size:" + ans.size());
-                    System.out.println("cans的size:" + cans.size());
                     if(!isErr){
                         if (ans.size() == cans.size()) {
                             score = qscore;
                         } else {
                             // 拿一半分
                             score = Float.valueOf(String.valueOf(qscore * 0.5));
-                            System.out.println("对一半");
                         }
                     }
-                    System.out.println("批改后的分数： " + score);
                     readOver.set(i,String.valueOf(score));
                 }
                 // 填空题
-                // TODO
                 else if (jo.get("qtype").equals(Code.QueType_fillin_question)) {
-                    readOver.set(i, "-1");
+                    String ans = submitContent.get(i);
+                    String cans = jo.getString("cans");
+                    System.out.println("自动批改填空题中 ... ");
+                    System.out.println("ans: " + ans);
+                    System.out.println("cans: " + cans);
+                    if(cans.equals(ans)){
+                        readOver.set(i, String.valueOf(qscore));
+                    }else{
+                        readOver.set(i, "0.0");
+                    }
                 }
 
                 //简答题
@@ -135,16 +134,29 @@ public class SubmitServiceImpl implements SubmitService{
                     System.out.println("Err Cause By autoReadOver: 题目类型不存在: " + jo.get("qtype"));
                 }
             }
+            int finished = 1;
+            Float finial_score = 0F;
+            for (String s : readOver) {
+                if(s.equals("-1")){
+                    finished = 0;
+                    break;
+                }else{
+                    finial_score += Float.parseFloat(s);
+                }
+            }
+            submitWorkContent.setFinishReadOver(finished);
+            sw.setScore(finial_score);
+            sw.setFinishReadOver(finished);
             submitWorkContent.setReadover(TypeChange.arrL2str(readOver));
             try{
                 submitWorkContentDao.updateById(submitWorkContent);
-                return submitWork;
+                return sw;
             }catch (Exception e){
                 return null;
             }
         }else{
-            System.out.println("WorkCointent为null");
+            System.out.println("WorkCointent 为 null");
         }
-        return submitWork;
+        return sw;
     }
 }
