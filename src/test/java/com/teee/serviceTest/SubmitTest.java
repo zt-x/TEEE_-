@@ -16,7 +16,7 @@ public class SubmitTest {
     @Test
     public void autoReadOverTest(){
         SubmitWorkDao bean = SpringBeanUtil.getBean(SubmitWorkDao.class);
-        SubmitWork submitWork = bean.selectById(5);
+        SubmitWork submitWork = bean.selectById(12);
         SubmitWork submitWork1 = SubmitServiceImpl.autoReadOver(submitWork, true, true);
         System.out.println(submitWork1);
     }

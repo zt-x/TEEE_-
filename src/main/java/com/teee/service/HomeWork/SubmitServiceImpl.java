@@ -114,16 +114,21 @@ public class SubmitServiceImpl implements SubmitService{
                     readOver.set(i,String.valueOf(score));
                 }
                 // 填空题
+                // TODO 简答题的Code设置出错
                 else if (jo.get("qtype").equals(Code.QueType_fillin_question)) {
-                    String ans = submitContent.get(i);
-                    String cans = jo.getString("cans");
-                    System.out.println("自动批改填空题中 ... ");
-                    System.out.println("ans: " + ans);
-                    System.out.println("cans: " + cans);
-                    if(cans.equals(ans)){
-                        readOver.set(i, String.valueOf(qscore));
-                    }else{
-                        readOver.set(i, "0.0");
+                    try{
+                        String ans = submitContent.get(i);
+                        String cans = jo.getString("cans");
+                        System.out.println("自动批改填空题中 ... ");
+                        System.out.println("ans: " + ans);
+                        System.out.println("cans: " + cans);
+                        if(cans.equals(ans)){
+                            readOver.set(i, String.valueOf(qscore));
+                        }else{
+                            readOver.set(i, "0.0");
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
 
