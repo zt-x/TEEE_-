@@ -13,5 +13,10 @@ import lombok.Data;
 public class SubmitWorkContent {
     @TableId(type = IdType.AUTO)
     Integer submitId;
+    /** ["","",""]*/
     String submitContent;
+
+    /** [{qscore:, qreadover:}]**/
+    String readover;
+    Integer finishReadOver;
 }

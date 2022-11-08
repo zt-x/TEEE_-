@@ -1,18 +1,19 @@
 package com.teee.service.HomeWork;
 
 
-import com.teee.dao.AWorkDao;
-import com.teee.dao.SubmitWorkContentDao;
-import com.teee.dao.SubmitWorkDao;
-import com.teee.dao.UserInfoDao;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.teee.config.Code;
+import com.teee.dao.*;
 import com.teee.domain.UserInfo;
-import com.teee.domain.works.AWork;
 import com.teee.domain.works.SubmitWork;
 import com.teee.domain.works.SubmitWorkContent;
 import com.teee.utils.SpringBeanUtil;
+import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,12 +57,72 @@ public class SubmitServiceImpl implements SubmitService{
     public SubmitWork readOver(SubmitWork submitWork) {
         return null;
     }
-    //TODO
+
+
     public static SubmitWork autoReadOver(SubmitWork submitWork, boolean readChoice, boolean readFillIn) {
         SubmitWorkContentDao submitWorkContentDao = SpringBeanUtil.getBean(SubmitWorkContentDao.class);
+        BankWorkDao bankWorkDao = SpringBeanUtil.getBean(BankWorkDao.class);
+
         SubmitWork sw = submitWork;
         Integer submitId = sw.getSubmitId();
-        String submitContent = submitWorkContentDao.selectById(submitId).getSubmitContent();
+        SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(submitId);
+        ArrayList<String> readOver;
+        ArrayList<String> submitContent = TypeChange.str2arrl(submitWorkContent.getSubmitContent());
+
+        String readover = submitWorkContent.getReadover();
+        if(readover.equals("")){
+            readOver = new ArrayList<>(SubmitWork.getNumOfQue(sw));
+        }else {
+            readOver = TypeChange.str2arrl(readover);
+        }
+        JSONArray workCotent = SubmitWork.getWorkCotent(sw);
+        JSONObject jo;
+        if (workCotent != null) {
+            for (int i=0;i<workCotent.size();i++) {
+                jo = (JSONObject) workCotent.get(i);
+                Float qscore = (Float) jo.get("qscore");
+
+                // 选择题
+                if (jo.get("qtype").equals(Code.QueType_choice_question)) {
+                    Float score = -1f;
+                    ArrayList<String> cans = TypeChange.str2arrl((String) jo.get("cans"));
+                    ArrayList<String> ans = TypeChange.str2arrl((String) submitContent.get(i));
+                    //cans 是正确答案
+                    //ans 是学生提交的答案
+                    //ans中 出现 不属于cans 的 ，则0分，否则满分
+                    for (String an : ans) {
+                        if (!cans.contains(an)) {
+                            score = 0f;
+                        } else {
+                            score = qscore;
+                        }
+                    }
+                    if (ans.size() == cans.size()) {
+                        score = qscore;
+                    } else {
+                        // 拿一半分
+                        score = Float.valueOf(String.valueOf(qscore * 0.5));
+                    }
+                    readOver.set(i,String.valueOf(score));
+                }
+                // 填空题
+                // TODO
+                else if (jo.get("qtype").equals(Code.QueType_fillin_question)) {
+                    readOver.set(i, "-1");
+                }
+
+                //简答题
+                else if (jo.get("qtype").equals(Code.QueType_text_question)) {
+                    readOver.set(i, "-1");
+                } else {
+                    System.out.println("Err Cause By autoReadOver: 题目类型不存在: " + jo.get("qtype"));
+                }
+            }
+            submitWorkContent.setReadover(TypeChange.arrL2str(readOver));
+            submitWorkContentDao.updateById(submitWorkContent);
+        }else{
+            System.out.println("WorkCointent为null");
+        }
         return submitWork;
     }
 }

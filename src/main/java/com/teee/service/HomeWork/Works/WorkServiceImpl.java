@@ -65,7 +65,7 @@ public class WorkServiceImpl implements WorkService{
     public BooleanReturn addBankTags(Integer workId, ArrayList<String> tags) {
         try {
             BankWork bankWork = bankWorkDao.selectById(workId);
-            ArrayList<String> origin = TypeChange.str_arrl(bankWork.getTags());
+            ArrayList<String> origin = TypeChange.str2arrl(bankWork.getTags());
             origin.addAll(tags);
             bankWork.setTags(origin.toString());
             bankWorkDao.updateById(bankWork);

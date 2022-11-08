@@ -14,7 +14,7 @@ public class javaTest {
 
         String str = arr.toString();
 
-        for (String s : TypeChange.str_arrl(str)) {
+        for (String s : TypeChange.str2arrl(str)) {
             System.out.println(s);
         }
 

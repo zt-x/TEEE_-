@@ -70,7 +70,7 @@ public class QuestionBankServiceImpl implements QuestionBankService{
     public BooleanReturn addBankTags(Integer bankId, ArrayList<String> tags) {
         try{
             BankQuestion bankQuestion = bankQuestionDao.selectById(bankId);
-            ArrayList<String> origin = TypeChange.str_arrl(bankQuestion.getTags());
+            ArrayList<String> origin = TypeChange.str2arrl(bankQuestion.getTags());
             origin.addAll(tags);
             bankQuestion.setTags(origin.toString());
             bankQuestionDao.updateById(bankQuestion);
