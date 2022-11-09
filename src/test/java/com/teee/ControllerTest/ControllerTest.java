@@ -2,6 +2,8 @@ package com.teee.ControllerTest;
 
 import com.teee.TEEEApplication;
 import com.teee.controller.publicpart.Work.BankController;
+import com.teee.controller.publicpart.Work.Impl.WorkControllerImpl;
+import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.controller.student.CourseController;
 import com.teee.controller.student.Impl.CourseControllerImpl;
 import com.teee.domain.returnClass.Result;
@@ -29,5 +31,12 @@ public class ControllerTest {
         Result myCourses = bean.getMyCourses(token);
         System.out.println(myCourses.getData());
 
+    }
+
+    @Test
+    public void getAllSubmit(){
+        WorkController workController = SpringBeanUtil.getBean(WorkControllerImpl.class);
+        Result allSubmitByWorkId = workController.getAllSubmitByWorkId(28);
+        System.out.println(allSubmitByWorkId.getData());
     }
 }

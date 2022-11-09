@@ -8,10 +8,13 @@ import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.dao.AWorkDao;
 import com.teee.dao.BankWorkDao;
 import com.teee.dao.CourseDao;
+import com.teee.dao.SubmitWorkDao;
 import com.teee.domain.Course;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 import com.teee.domain.works.BankWork;
+import com.teee.domain.works.SubmitWork;
+import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class WorkControllerImpl implements WorkController {
-
 
     @Autowired
     AWorkDao aWorkDao;
@@ -97,4 +100,7 @@ public class WorkControllerImpl implements WorkController {
             return new Result(Code.ERR, null,"WorkContImpl.getWork Err:" + e.getMessage());
         }
     }
+
+
+
 }

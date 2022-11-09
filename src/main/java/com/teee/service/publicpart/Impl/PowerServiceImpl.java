@@ -50,6 +50,7 @@ public class PowerServiceImpl implements PowerService {
             routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
             routers.add(rf.getRouterObject("WorkContent", "/WorkContent", "Course/AWorkContent.vue", "", false));
             routers.add(rf.getRouterObject("作业库/题库管理", "/BankManager", "BankManagerView.vue", "fa fa-university", true));
+
         }
         return routers;
     }

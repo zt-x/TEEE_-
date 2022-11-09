@@ -1,17 +1,24 @@
 package com.teee.controller.publicpart.Work.Impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.SubmitWorkController;
 import com.teee.dao.SubmitWorkContentDao;
+import com.teee.dao.SubmitWorkDao;
 import com.teee.dao.UserInfoDao;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.SubmitWork;
 import com.teee.domain.works.SubmitWorkContent;
 import com.teee.service.HomeWork.SubmitService;
 import com.teee.utils.JWT;
+import com.teee.utils.SpringBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -60,13 +67,26 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
         return res;
     }
 
+    /**
+     *  获取提交的作业
+     *  Role: Teacher
+     *  data<JSONArray>:[
+     *      {submitId:, usernmae, uid:, finish_readover: , score: }
+     *  ]
+     * */
+    @ResponseBody
     @Override
     @RequestMapping("/submit/getAllSubmitByWorkId")
-    @ResponseBody
     public Result getAllSubmitByWorkId(@RequestParam("wid") int wid) {
-        Result res = new Result();
-
-        return null;
+        SubmitWorkDao submitWorkDao = SpringBeanUtil.getBean(SubmitWorkDao.class);
+        LambdaQueryWrapper<SubmitWork> lqw = new LambdaQueryWrapper();
+        lqw.eq(SubmitWork::getWorkTableId, wid);
+        List<SubmitWork> submitWorks = submitWorkDao.selectList(lqw);
+        ArrayList<String> jarr = new ArrayList<>();
+        for (SubmitWork submitWork : submitWorks) {
+            jarr.add(JSONObject.toJSONString(submitWork));
+        }
+        return new Result(Code.Suc, jarr, "获取成功");
     }
 
     @Override
