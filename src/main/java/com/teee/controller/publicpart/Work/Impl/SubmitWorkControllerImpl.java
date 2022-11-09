@@ -4,15 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.SubmitWorkController;
-import com.teee.dao.SubmitWorkContentDao;
-import com.teee.dao.SubmitWorkDao;
-import com.teee.dao.UserInfoDao;
+import com.teee.dao.*;
 import com.teee.domain.returnClass.Result;
+import com.teee.domain.works.AWork;
 import com.teee.domain.works.SubmitWork;
 import com.teee.domain.works.SubmitWorkContent;
 import com.teee.service.HomeWork.SubmitService;
 import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
+import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +36,6 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
 
     public Result SubmitWork(@RequestHeader("Authorization") String token, @RequestParam("wid") int wid, @RequestParam("ans") String ans) {
         Result res = new Result();
-        System.out.println(ans);
         SubmitWorkContent submitWorkContent = new SubmitWorkContent();
         submitWorkContent.setSubmitContent(ans);
         submitWorkContent.setReadover("");
@@ -82,9 +81,9 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
         LambdaQueryWrapper<SubmitWork> lqw = new LambdaQueryWrapper();
         lqw.eq(SubmitWork::getWorkTableId, wid);
         List<SubmitWork> submitWorks = submitWorkDao.selectList(lqw);
-        ArrayList<String> jarr = new ArrayList<>();
+        ArrayList<JSONObject> jarr = new ArrayList<>();
         for (SubmitWork submitWork : submitWorks) {
-            jarr.add(JSONObject.toJSONString(submitWork));
+            jarr.add((JSONObject) JSONObject.toJSON(submitWork));
         }
         return new Result(Code.Suc, jarr, "获取成功");
     }
@@ -99,7 +98,48 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     @Override
     @RequestMapping("/submit/getSubmitSummary")
     @ResponseBody
-    public Result getSubmitSummary(@RequestParam("subid") int subid) {
-        return null;
+    public Result getSubmitSummary(@RequestParam("wid") int wid) {
+        float total_score;
+        String workname;
+        int submit_submitedNum;
+        int submit_totalNum;
+        int readOver_done;
+        int readOver_total;
+        // NUM of people;
+        int NOP_excellent;
+        int NOP_good;
+        int NOP_NTB; // not too bad
+        int NOP_fail;
+        try{
+            CourseUserDao courseUserDao = SpringBeanUtil.getBean(CourseUserDao.class);
+            SubmitWorkDao submitWorkDao = SpringBeanUtil.getBean(SubmitWorkDao.class);
+            AWorkDao aWorkDao = SpringBeanUtil.getBean(AWorkDao.class);
+            AWork aWork = aWorkDao.selectById(wid);
+            total_score = aWork.getTotalScore();
+            workname = aWork.getWorkName();
+            Integer cid = aWork.getCid();
+            String uids = courseUserDao.selectById(cid).getUid();
+
+            submit_totalNum = uids.length() - uids.replaceAll(",", "").length() + 1;
+            submit_submitedNum = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid));
+
+            readOver_done = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getFinishReadOver, 1));
+            readOver_total = submit_submitedNum;
+
+            NOP_excellent = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.9, total_score));
+            NOP_good = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.75, total_score*0.9));
+            NOP_NTB = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.6, total_score*0.75));
+            NOP_fail = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0, total_score*0.6));
+
+            //包装 返回
+            String ret = "{total_score: " + total_score + ", workname: " + workname + ", submit_submitedNum: " + submit_submitedNum
+                    + ", submit_totalNum: " + submit_totalNum + ", readOver_done: " + readOver_done + ", readOver_total: " + readOver_total
+                    + ", NOP_excellent: " + NOP_excellent+ ", NOP_good: " + NOP_good+ ", NOP_NTB: " + NOP_NTB+ ", NOP_fail: " + NOP_fail+"}";
+
+            return new Result(Code.Suc, ret, "获取提交作业信息成功捏");
+        }catch(Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, e.getStackTrace(), "getSubmitSummaryErr"); 
+        }
     }
 }

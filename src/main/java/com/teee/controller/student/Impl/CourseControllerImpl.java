@@ -64,7 +64,6 @@ public class CourseControllerImpl implements CourseController {
         Result r = new Result();
         // 1、 从token获取用户ID
         Long uid = JWT.getUid(token);
-        System.out.println("uid=" + uid);
         // 2、查询
         String s = JSON.toJSONString(courseService.getStuCourses(uid));
         // 3、装配r

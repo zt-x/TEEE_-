@@ -39,7 +39,7 @@ public class JWT {
 
     public static Long getUid(String token){
         Object uid = parse(token).get("uid");
-        String str = Integer.toString((Integer) uid);
+        String str = String.valueOf(uid);
         return Long.valueOf(str);
     }
     public static String getRole(String token){

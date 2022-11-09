@@ -40,4 +40,10 @@ public class ControllerTest {
         Result allSubmitByWorkId = workController.getAllSubmitByWorkId(28);
         System.out.println(allSubmitByWorkId.getData());
     }
+
+    @Test
+    public void getSubmitSummary(){
+        SubmitWorkControllerImpl workController = SpringBeanUtil.getBean(SubmitWorkControllerImpl.class);
+        System.out.println(workController.getSubmitSummary(29).getData());
+    }
 }

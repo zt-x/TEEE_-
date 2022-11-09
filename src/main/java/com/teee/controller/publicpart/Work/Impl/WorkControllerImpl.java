@@ -57,8 +57,6 @@ public class WorkControllerImpl implements WorkController {
     @RequestMapping("/Course/releaseAWork")
     public Result ReleaseAWork(@RequestBody AWork aWork) {
 
-        System.out.println(aWork);
-
 
         // 验证 token和 cid
         Course course = courseDao.selectById(aWork.getCid());

@@ -4,6 +4,7 @@ package com.teee.domain.works;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.teee.dao.AWorkDao;
 import com.teee.dao.BankWorkDao;
@@ -24,6 +25,9 @@ public class SubmitWork {
     Integer finishReadOver;
     Float score;
     Integer submitId;
+
+    @TableLogic//逻辑删除
+    private Integer deleted;
 
     public SubmitWork(Long uid, String username, Integer workTableId, Integer finishReadOver, Float score, int ans) {
         this.uid = uid;

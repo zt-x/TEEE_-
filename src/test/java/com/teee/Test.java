@@ -107,7 +107,6 @@ public class Test {
             jsonArray.add(jsonObject);
         }
 //
-        System.out.println(jsonArray);
 //
 //
 //
@@ -133,8 +132,7 @@ public class Test {
         FillInQuestion fillInQuestion2 = new FillInQuestion(1, 1.0F, "我是2", "QuestionText");
         String s = QuestionManager.addQuestion("", fillInQuestion);
         String s1 = QuestionManager.addQuestion(s, fillInQuestion2);
-        System.out.println(s);
-        System.out.println(s1);
+
 
     }
 
