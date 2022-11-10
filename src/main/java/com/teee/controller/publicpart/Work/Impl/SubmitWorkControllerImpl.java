@@ -77,13 +77,17 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     @Override
     @RequestMapping("/submit/getAllSubmitByWorkId")
     public Result getAllSubmitByWorkId(@RequestParam("wid") int wid) {
+        UserInfoDao userInfoDao = SpringBeanUtil.getBean(UserInfoDao.class);
         SubmitWorkDao submitWorkDao = SpringBeanUtil.getBean(SubmitWorkDao.class);
         LambdaQueryWrapper<SubmitWork> lqw = new LambdaQueryWrapper();
         lqw.eq(SubmitWork::getWorkTableId, wid);
         List<SubmitWork> submitWorks = submitWorkDao.selectList(lqw);
         ArrayList<JSONObject> jarr = new ArrayList<>();
+        JSONObject jb;
         for (SubmitWork submitWork : submitWorks) {
-            jarr.add((JSONObject) JSONObject.toJSON(submitWork));
+            jb = (JSONObject) JSONObject.toJSON(submitWork);
+            jb.put("avatar", userInfoDao.selectById(submitWork.getUid()).getAvatar());
+            jarr.add(jb);
         }
         return new Result(Code.Suc, jarr, "获取成功");
     }
