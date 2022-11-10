@@ -2,6 +2,7 @@ package com.teee.domain.works;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -19,4 +20,6 @@ public class AWork {
     Integer autoReadoverChoice;
     Integer autoReadoverFillIn;
 
+    @TableLogic//逻辑删除
+    private Integer deleted;
 }

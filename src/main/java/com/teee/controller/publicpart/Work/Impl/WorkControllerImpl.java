@@ -99,6 +99,19 @@ public class WorkControllerImpl implements WorkController {
         }
     }
 
-
-
+    @ResponseBody
+    @Override
+    @RequestMapping("/Course/deleteAWork")
+    public Result deleteAWork(@RequestParam("wid") Integer wid) {
+        AWork aWork = aWorkDao.selectOne(new LambdaQueryWrapper<AWork>().eq(AWork::getId, wid));
+        if(aWork == null){
+            return new Result(Code.ERR, null, "该作业不存在(作业id异常)");
+        }
+        try{
+            aWorkDao.deleteById(aWork.getId());
+        }catch (Exception e){
+            return new Result(Code.ERR, null, "奇怪的异常: " + e.getMessage());
+        }
+        return new Result(Code.Suc, wid, "删除成功");
+    }
 }

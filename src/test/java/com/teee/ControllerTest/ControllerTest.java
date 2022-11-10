@@ -46,4 +46,11 @@ public class ControllerTest {
         SubmitWorkControllerImpl workController = SpringBeanUtil.getBean(SubmitWorkControllerImpl.class);
         System.out.println(workController.getSubmitSummary(29).getData());
     }
+
+    @Test
+    public void deleteAWork(){
+        WorkControllerImpl bean = SpringBeanUtil.getBean(WorkControllerImpl.class);
+        System.out.println(bean.deleteAWork(33));
+
+    }
 }

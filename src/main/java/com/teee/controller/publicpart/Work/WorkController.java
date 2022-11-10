@@ -11,4 +11,5 @@ public interface WorkController {
     Result getAllWorksByCID(int cid);
     Result ReleaseAWork(AWork aWork);
     Result getWork(int id);
+    Result deleteAWork(Integer wid);
 }
