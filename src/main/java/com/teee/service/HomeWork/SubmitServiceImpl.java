@@ -108,6 +108,10 @@ public class SubmitServiceImpl implements SubmitService{
                             score = qscore;
                         }
                     }
+                    if(ans.size() == 0){
+                        isErr = true;
+                        score = 0f;
+                    }
                     if(!isErr){
                         if (ans.size() == cans.size()) {
                             score = qscore;
@@ -116,7 +120,7 @@ public class SubmitServiceImpl implements SubmitService{
                             score = Float.valueOf(String.valueOf(qscore * 0.5));
                         }
                     }
-                    readOver.set(i,String.valueOf(score));
+                    readOver.set(i,String.format("%.2f", score));
                 }
                 // 填空题
                 // TODO 简答题的Code设置出错

@@ -130,10 +130,10 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             readOver_done = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getFinishReadOver, 1));
             readOver_total = submit_submitedNum;
 
-            NOP_excellent = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.9, total_score));
-            NOP_good = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.75, total_score*0.9));
-            NOP_NTB = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0.6, total_score*0.75));
-            NOP_fail = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0, total_score*0.6));
+            NOP_excellent = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid).between(SubmitWork::getScore, total_score*0.9, total_score));
+            NOP_good = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid).between(SubmitWork::getScore, total_score*0.75, total_score*0.9));
+            NOP_NTB = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid).between(SubmitWork::getScore, total_score*0.6, total_score*0.75));
+            NOP_fail = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid).between(SubmitWork::getScore, total_score*0, total_score*0.6));
 
             //包装 返回
             String ret = "{\"total_score\": \"" + total_score + "\", \"workname\": \"" + workname + "\", \"submit_submitedNum\": \"" + submit_submitedNum
