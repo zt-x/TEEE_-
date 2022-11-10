@@ -41,6 +41,7 @@ public class CourseControllerImpl implements CourseController {
         // 3、写入CourseUser表， 根据cid读取courseUser对象，使用JSONObject读出UID、添加UID、写回
         // 4、写入UserCourse表，根据uid读 .......
         try{
+            System.out.println("cid = " + cid + " uid = " + uid);
             courseService.addStuToCourse(cid, uid);
             courseService.addCourseToUser(uid,cid);
             r.setCode(Code.Suc);

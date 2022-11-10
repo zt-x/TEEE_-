@@ -132,9 +132,9 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             NOP_fail = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().between(SubmitWork::getScore, total_score*0, total_score*0.6));
 
             //包装 返回
-            String ret = "{total_score: " + total_score + ", workname: " + workname + ", submit_submitedNum: " + submit_submitedNum
-                    + ", submit_totalNum: " + submit_totalNum + ", readOver_done: " + readOver_done + ", readOver_total: " + readOver_total
-                    + ", NOP_excellent: " + NOP_excellent+ ", NOP_good: " + NOP_good+ ", NOP_NTB: " + NOP_NTB+ ", NOP_fail: " + NOP_fail+"}";
+            String ret = "{\"total_score\": \"" + total_score + "\", \"workname\": \"" + workname + "\", \"submit_submitedNum\": \"" + submit_submitedNum
+                    + "\", \"submit_totalNum\": \"" + submit_totalNum + "\", \"readOver_done\": \"" + readOver_done + "\", \"readOver_total\": \"" + readOver_total
+                    + "\", \"NOP_excellent\": \"" + NOP_excellent+ "\", \"NOP_good\": \"" + NOP_good+ "\", \"NOP_NTB\": \"" + NOP_NTB+ "\", \"NOP_fail\": \"" + NOP_fail+"\"}";
 
             return new Result(Code.Suc, ret, "获取提交作业信息成功捏");
         }catch(Exception e){
