@@ -9,4 +9,5 @@ public interface SubmitWorkController {
     Result getAllSubmitByWorkId(int wid);
     Result setSubmitScore(int subid, float score);
     Result getSubmitSummary(int subid);
+    Result getSubmitBySid(int sid);
 }

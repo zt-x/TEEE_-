@@ -4,6 +4,7 @@ import com.teee.TEEEApplication;
 import com.teee.controller.publicpart.Work.BankController;
 import com.teee.controller.publicpart.Work.Impl.SubmitWorkControllerImpl;
 import com.teee.controller.publicpart.Work.Impl.WorkControllerImpl;
+import com.teee.controller.publicpart.Work.SubmitWorkController;
 import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.controller.student.CourseController;
 import com.teee.controller.student.Impl.CourseControllerImpl;
@@ -51,6 +52,13 @@ public class ControllerTest {
     public void deleteAWork(){
         WorkControllerImpl bean = SpringBeanUtil.getBean(WorkControllerImpl.class);
         System.out.println(bean.deleteAWork(33));
+
+    }
+    @Test
+    public  void getSubmitBySid(){
+        SubmitWorkController submitWorkController = SpringBeanUtil.getBean(SubmitWorkController.class);
+        Result submitBySid = submitWorkController.getSubmitBySid(40);
+        System.out.println(submitBySid);
 
     }
 }

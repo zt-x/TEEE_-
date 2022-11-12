@@ -146,4 +146,24 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             return new Result(Code.ERR, e.getStackTrace(), "getSubmitSummaryErr"); 
         }
     }
+
+    @Override
+    @RequestMapping("/submit/getSubmitBySid")
+    @ResponseBody
+    public Result getSubmitBySid(@RequestParam("sid") int sid) {
+        try{
+            SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(sid);
+
+            // 给Content的每一项加上引号
+            ArrayList<String> arrayList = TypeChange.str2arrl(submitWorkContent.getSubmitContent(), ", ");
+            for (int i = 0; i < arrayList.size(); i++) {
+                arrayList.set(i, "\"" + arrayList.get(i) + "\"");
+            }
+            submitWorkContent.setSubmitContent(arrayList.toString());
+
+            return new Result(Code.Suc, JSONObject.toJSONString(submitWorkContent), "获取sid=" + sid + "的数据成功");
+        }catch (Exception e){
+            return new Result(Code.ERR, null, "Err cause by getSubmitBySid: " + e.getMessage());
+        }
+    }
 }
