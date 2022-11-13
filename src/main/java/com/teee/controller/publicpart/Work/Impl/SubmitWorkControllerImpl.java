@@ -29,7 +29,10 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
 
     @Autowired
     SubmitWorkContentDao submitWorkContentDao;
-
+    
+    @Autowired
+    SubmitWorkDao submitWorkDao;
+    
     @Override
     @RequestMapping("/submit/submitWork")
     @ResponseBody
@@ -95,8 +98,35 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     @Override
     @RequestMapping("/submit/setSubmitScore")
     @ResponseBody
-    public Result setSubmitScore(@RequestParam("subid") int subid, @RequestParam("score") float score) {
-        return null;
+    public Result setSubmitScore(@RequestParam("subid") int subid, @RequestParam("score") String score) {
+        try{
+            // 重置Submit_work_content表的readover
+            SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(subid);
+            SubmitWork submitWork = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getSubmitId, subid));
+//            submitWorkContent.setReadover(TypeChange.arrL2str(TypeChange.str2arrl("["+score+"]",",")));
+            // 重新计算Submit_work表的Score
+            int finish_readover = 1;
+            float total_score = 0f;
+            ArrayList<String> arrayList = TypeChange.str2arrl("["+score+"]", ",");
+            for (int i=0;i<arrayList.size();i++) {
+                if(Float.parseFloat(arrayList.get(i)) == -1){
+                    finish_readover = 0;
+                }
+                total_score += Float.parseFloat(arrayList.get(i));
+                arrayList.set(i, String.format("%.2f", (Float.parseFloat(arrayList.get(i)))));
+            }
+            submitWorkContent.setReadover(TypeChange.arrL2str(arrayList));
+            System.out.println("SID = " + submitWork.getId());
+            submitWork.setScore(total_score);
+            submitWork.setFinishReadOver(finish_readover);
+            submitWorkContent.setFinishReadOver(finish_readover);
+            submitWorkContentDao.updateById(submitWorkContent);
+            submitWorkDao.updateById(submitWork);
+            return new Result(Code.Suc, null, "批改成功!");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, e.getStackTrace(), "Err cause by submWCPmImpl.setSubScore");
+        }
     }
 
     @Override

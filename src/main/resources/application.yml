@@ -7,6 +7,6 @@ spring:
     url: jdbc:mysql://124.223.187.100:3306/teee_db
     username: TEEE
     password: teee123456
-#mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

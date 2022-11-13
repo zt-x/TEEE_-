@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SubmitWorkController {
     Result SubmitWork(String token, int wid, String ans);
     Result getAllSubmitByWorkId(int wid);
-    Result setSubmitScore(int subid, float score);
+    Result setSubmitScore(int subid, String score);
     Result getSubmitSummary(int subid);
     Result getSubmitBySid(int sid);
 }
