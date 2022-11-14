@@ -103,16 +103,16 @@ public class TeacherCourseControllerImpl implements TeacherCourseController {
      *  }
      *
      * */
+    // TODO
     public Result getAllUser(Integer cid) {
         String uids = courseUserDao.selectById(cid).getUid();
-        ArrayList<String> arrayList = TypeChange.str2arrl(uids);
-        JSONArray jarr = new JSONArray();
-        for (String s : arrayList) {
-
-        }
         if(uids != null){
-            return new Result(Code.Suc, uids, "获取用户成功");
+            ArrayList<String> arrayList = TypeChange.str2arrl(uids);
+            JSONArray jarr = new JSONArray();
+            for (String s : arrayList) {
 
+            }
+            return new Result(Code.Suc, uids, "获取用户成功");
         }else{
             return new Result(Code.ERR, null, "获取");
         }
