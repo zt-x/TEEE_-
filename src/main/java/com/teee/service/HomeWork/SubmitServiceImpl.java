@@ -1,19 +1,12 @@
 package com.teee.service.HomeWork;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.Impl.AutoReadOver;
 import com.teee.dao.*;
 import com.teee.domain.UserInfo;
 import com.teee.domain.works.SubmitWork;
-import com.teee.domain.works.SubmitWorkContent;
-import com.teee.utils.SpringBeanUtil;
-import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
