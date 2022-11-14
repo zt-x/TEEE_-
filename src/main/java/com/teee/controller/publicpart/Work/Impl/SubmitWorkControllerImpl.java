@@ -103,7 +103,6 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             // 重置Submit_work_content表的readover
             SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(subid);
             SubmitWork submitWork = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getSubmitId, subid));
-//            submitWorkContent.setReadover(TypeChange.arrL2str(TypeChange.str2arrl("["+score+"]",",")));
             // 重新计算Submit_work表的Score
             int finish_readover = 1;
             float total_score = 0f;
@@ -117,11 +116,14 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             }
             submitWorkContent.setReadover(TypeChange.arrL2str(arrayList));
             System.out.println("SID = " + submitWork.getId());
+            System.out.println(submitWork);
             submitWork.setScore(total_score);
             submitWork.setFinishReadOver(finish_readover);
             submitWorkContent.setFinishReadOver(finish_readover);
             submitWorkContentDao.updateById(submitWorkContent);
+
             submitWorkDao.updateById(submitWork);
+            System.out.println("subworkID=" + submitWork.getId() + "被改变了");
             return new Result(Code.Suc, null, "批改成功!");
         }catch (Exception e){
             e.printStackTrace();
