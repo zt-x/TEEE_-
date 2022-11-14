@@ -13,4 +13,5 @@ public interface WorkController {
     Result ReleaseAWork(AWork aWork);
     Result getWork(int id);
     Result deleteAWork(Integer wid);
+    Result getWorkFinishStatus(String token, Integer cid);
 }

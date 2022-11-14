@@ -61,4 +61,11 @@ public class ControllerTest {
         System.out.println(submitBySid);
 
     }
+
+    @Test
+    public void getWorkFinishStatus(){
+        WorkController wcl = SpringBeanUtil.getBean(WorkController.class);
+        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIwMjAzMTEwMTAxNCwicm9sZSI6InN0dWRlbnQiLCJleHAiOjE2Njg0ODcyNzcsImp0aSI6ImQ4OWJlYzYyLWIwOGQtNGYzZS1hNWVjLWVlOGM1M2E5YWFiYSJ9.jpAd5Lky4ds03v6jZmsR7oX-Uy0M9Gxn0lqs_ITz4hI";
+        System.out.println(wcl.getWorkFinishStatus(token, 28));
+    }
 }

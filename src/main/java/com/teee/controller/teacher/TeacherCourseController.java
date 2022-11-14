@@ -9,4 +9,5 @@ import com.teee.domain.returnClass.Result;
 public interface TeacherCourseController {
     Result createCourse(String token, Course courseInfo);
     Result getMyCourses(String token);
+    Result getAllUser(Integer cid);
 }

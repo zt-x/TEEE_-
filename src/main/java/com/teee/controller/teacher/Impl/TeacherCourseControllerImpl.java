@@ -1,6 +1,7 @@
 package com.teee.controller.teacher.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.teee.config.Code;
 import com.teee.controller.teacher.TeacherCourseController;
 import com.teee.dao.CourseDao;
@@ -11,6 +12,7 @@ import com.teee.domain.returnClass.Result;
 import com.teee.service.Course.CourseService;
 import com.teee.service.User.UserService;
 import com.teee.utils.JWT;
+import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
 
 
 @Controller
@@ -86,5 +90,31 @@ public class TeacherCourseControllerImpl implements TeacherCourseController {
         r.setData(s);
         return r;
 
+    }
+
+    @Override
+    @RequestMapping("/Course/getAllUser")
+    @ResponseBody
+    /**
+     *
+     * Return:
+     *  {
+     *      [uid:, username: ,avatar:, finishWorkNum:, workAverageScore:]
+     *  }
+     *
+     * */
+    public Result getAllUser(Integer cid) {
+        String uids = courseUserDao.selectById(cid).getUid();
+        ArrayList<String> arrayList = TypeChange.str2arrl(uids);
+        JSONArray jarr = new JSONArray();
+        for (String s : arrayList) {
+
+        }
+        if(uids != null){
+            return new Result(Code.Suc, uids, "获取用户成功");
+
+        }else{
+            return new Result(Code.ERR, null, "获取");
+        }
     }
 }

@@ -14,14 +14,12 @@ import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
+import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,5 +111,43 @@ public class WorkControllerImpl implements WorkController {
             return new Result(Code.ERR, null, "奇怪的异常: " + e.getMessage());
         }
         return new Result(Code.Suc, wid, "删除成功");
+    }
+
+
+    @Override
+    @RequestMapping("/Work/getWorkFinishStatus")
+    @ResponseBody
+    public Result getWorkFinishStatus(@RequestHeader("Authorization") String token,@RequestParam("cid") Integer cid) {
+        Long uid = JWT.getUid(token);
+        JSONArray jarr = (JSONArray) getAllWorksByCID(cid).getData();
+        JSONArray jarr2 = new JSONArray();
+        SubmitWorkDao submitWorkDao = SpringBeanUtil.getBean(SubmitWorkDao.class);
+
+        // [{wid:, status: ,score:}]
+        // -1 未提交
+        // 0 批改中
+        // 1 已完成批改
+        for (Object o : jarr) {
+            JSONObject jo =  (JSONObject)o;
+            JSONObject jo2 = new JSONObject();
+            Integer id = (Integer) jo.get("id");
+            jo2.put("wid", id);
+            SubmitWork submitWork = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, id).eq(SubmitWork::getUid, uid));
+            if(submitWork == null){
+                // 未提交
+                jo2.put("status", -1);
+                jo2.put("score", 0);
+            }else{
+                if(submitWork.getFinishReadOver() == 0){
+                    jo2.put("status", 0);
+                    jo2.put("score", submitWork.getScore());
+                }else{
+                    jo2.put("status", 1);
+                    jo2.put("score", submitWork.getScore());
+                }
+            }
+            jarr2.add(jo2);
+        }
+        return new Result(Code.Suc, TypeChange.arr2str(jarr2), "获取作业完成状态成功!");
     }
 }
