@@ -1,6 +1,7 @@
 package com.teee.ControllerTest;
 
 import com.teee.TEEEApplication;
+import com.teee.controller.publicpart.CourseCon;
 import com.teee.controller.publicpart.Work.BankController;
 import com.teee.controller.publicpart.Work.Impl.SubmitWorkControllerImpl;
 import com.teee.controller.publicpart.Work.Impl.WorkControllerImpl;
@@ -74,5 +75,11 @@ public class ControllerTest {
     public void getAllUser(){
         TeacherCourseController teacherCourseController = SpringBeanUtil.getBean(TeacherCourseController.class);
         System.out.println(teacherCourseController.getAllUser(28));
+    }
+
+    @Test
+    public void getCourseInfo(){
+        CourseCon courseCon = SpringBeanUtil.getBean(CourseCon.class);
+        System.out.println(courseCon.getCourseInfo(28));
     }
 }
