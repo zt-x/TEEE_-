@@ -116,6 +116,7 @@ public class AutoReadOver {
 
             // 计算分率 Rate = 总分/实际总分
             double rate = aWorkDao.selectById(submitWork.getWorkTableId()).getTotalScore() / factTotalScore;
+            System.out.println("分率: " + rate);
             if(rate == 0){
                 // ERR
                 System.out.println("Err Cause By SubmitSeImpl.getRate == 0");

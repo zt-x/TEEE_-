@@ -1,5 +1,6 @@
 package com.teee.controller.publicpart.Work.Impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
@@ -32,7 +33,13 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     
     @Autowired
     SubmitWorkDao submitWorkDao;
-    
+
+    @Autowired
+    BankWorkDao bankWorkDao;
+
+    @Autowired
+    AWorkDao aWorkDao;
+
     @Override
     @RequestMapping("/submit/submitWork")
     @ResponseBody
@@ -106,6 +113,8 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             // 重新计算Submit_work表的Score
             int finish_readover = 1;
             float total_score = 0f;
+            double factTotalScore = 0;
+
             ArrayList<String> arrayList = TypeChange.str2arrl("["+score+"]", ",");
             for (int i=0;i<arrayList.size();i++) {
                 if(Float.parseFloat(arrayList.get(i)) == -1){
@@ -114,10 +123,17 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
                 total_score += Float.parseFloat(arrayList.get(i));
                 arrayList.set(i, String.format("%.2f", (Float.parseFloat(arrayList.get(i)))));
             }
+            JSONArray workCotent = SubmitWork.getWorkCotent(submitWork);
+            com.alibaba.fastjson2.JSONObject jo;
+            for (int i=0; i<workCotent.size(); i++) {
+                jo = (com.alibaba.fastjson2.JSONObject) workCotent.get(i);
+                Float qscore = Float.valueOf(jo.get("qscore").toString());
+                factTotalScore+=qscore;
+            }
+
             submitWorkContent.setReadover(TypeChange.arrL2str(arrayList));
-            System.out.println("SID = " + submitWork.getId());
-            System.out.println(submitWork);
-            submitWork.setScore(total_score);
+            double rate = aWorkDao.selectById(submitWork.getWorkTableId()).getTotalScore() / factTotalScore;
+            submitWork.setScore((float) (total_score*rate));
             submitWork.setFinishReadOver(finish_readover);
             submitWorkContent.setFinishReadOver(finish_readover);
             submitWorkContentDao.updateById(submitWorkContent);
