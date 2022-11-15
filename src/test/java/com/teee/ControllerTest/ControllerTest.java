@@ -8,6 +8,7 @@ import com.teee.controller.publicpart.Work.SubmitWorkController;
 import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.controller.student.CourseController;
 import com.teee.controller.student.Impl.CourseControllerImpl;
+import com.teee.controller.teacher.TeacherCourseController;
 import com.teee.domain.returnClass.Result;
 import com.teee.utils.SpringBeanUtil;
 import org.junit.Test;
@@ -65,7 +66,13 @@ public class ControllerTest {
     @Test
     public void getWorkFinishStatus(){
         WorkController wcl = SpringBeanUtil.getBean(WorkController.class);
-        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIwMjAzMTEwMTAxNCwicm9sZSI6InN0dWRlbnQiLCJleHAiOjE2Njg0ODcyNzcsImp0aSI6ImQ4OWJlYzYyLWIwOGQtNGYzZS1hNWVjLWVlOGM1M2E5YWFiYSJ9.jpAd5Lky4ds03v6jZmsR7oX-Uy0M9Gxn0lqs_ITz4hI";
-        System.out.println(wcl.getWorkFinishStatus(token, 28));
+//        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIwMjAzMTEwMTAxNCwicm9sZSI6InN0dWRlbnQiLCJleHAiOjE2Njg0ODcyNzcsImp0aSI6ImQ4OWJlYzYyLWIwOGQtNGYzZS1hNWVjLWVlOGM1M2E5YWFiYSJ9.jpAd5Lky4ds03v6jZmsR7oX-Uy0M9Gxn0lqs_ITz4hI";
+//        System.out.println(wcl.getWorkFinishStatus(token, 28));
+    }
+
+    @Test
+    public void getAllUser(){
+        TeacherCourseController teacherCourseController = SpringBeanUtil.getBean(TeacherCourseController.class);
+        System.out.println(teacherCourseController.getAllUser(28));
     }
 }
