@@ -139,6 +139,7 @@ public class TeacherCourseControllerImpl implements TeacherCourseController {
                 for (SubmitWork submitWork : submitWorks) {
                     avarage += submitWork.getScore();
                 }
+                avarage = avarage/ (submitWorks.size() == 0?1:submitWorks.size());
                 ret.put("workAverageScore", avarage);
                 jarr.add(ret);
             }

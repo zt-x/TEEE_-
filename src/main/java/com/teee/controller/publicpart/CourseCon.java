@@ -126,24 +126,29 @@ public class CourseCon {
             int NTB = 0;
             int fail = 0;
             Float total_score = aWorkDao.selectById(max).getTotalScore();
-            // 获取考试成绩
-            List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
-            for(SubmitWork sw: submitWorks){
-                if(sw.getScore() >= 0.9*total_score){
-                    excellent++;
-                }else if(sw.getScore() > 0.75*total_score){
-                    good++;
-                }else if(sw.getScore() > 0.6*total_score){
-                    NTB++;
-                }else {
-                    fail++;
+            if(max != -1){
+                List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
+                for(SubmitWork sw: submitWorks){
+                    System.out.println("sw.score = " + sw.getScore());
+                    if(sw.getScore() >= 0.9*total_score){
+                        excellent++;
+                    }else if(sw.getScore() > 0.75*total_score){
+                        good++;
+                    }else if(sw.getScore() > 0.6*total_score){
+                        NTB++;
+                    }else {
+                        fail++;
+                    }
                 }
             }
+            // 获取考试成绩
+
             ArrayList<Integer> arr = new ArrayList<>();
-            arr.set(0, excellent);
-            arr.set(1, good);
-            arr.set(2, NTB);
-            arr.set(3, fail);
+
+            arr.add(0, excellent);
+            arr.add(1, good);
+            arr.add(2, NTB);
+            arr.add(3, fail);
             ret.put("examsCount", arr);
 
             // 获取历次作业统计
@@ -182,11 +187,11 @@ public class CourseCon {
             }else {
                 System.out.println("Role Err: " + role);
             }
-
-//            ret.put("workCount")
+            ret.put("worksCount", TypeChange.arr2str(scores));
+            return  new Result(Code.Suc, ret, "获取成功嘞！");
         }catch (Exception e){
+            e.printStackTrace();
             return new Result(Code.ERR, e.getMessage(), "Err Cause by getCourseStatistic" + e.getMessage());
         }
-        return null;
     }
 }

@@ -36,7 +36,7 @@ public class SubmitServiceImpl implements SubmitService{
             Long uid = submitWork.getUid();
             UserInfo userInfo = userInfoDao.selectById(uid);
             submitWork.setUsername(userInfo.getUsername());
-            submitWorkDao.delete(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, submitWork.getUid()));
+            submitWorkDao.delete(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, submitWork.getUid()).eq(SubmitWork::getWorkTableId, submitWork.getWorkTableId()));
             submitWorkDao.insert(submitWork);
             boolean readChoice = (aWorkDao.selectById(submitWork.getWorkTableId()).getAutoReadoverChoice() == 1);
             boolean readFillIn = (aWorkDao.selectById(submitWork.getWorkTableId()).getAutoReadoverFillIn() == 1);
