@@ -15,7 +15,7 @@ public class AWork {
     Integer isExam;
     Float totalScore;
     Integer autoReadoverChoice;
-    @TableField("auto_readover_fillIn")
+    @TableField("auto_readover_fill_in")
     Integer autoReadoverFillIn;
 
     @TableLogic//逻辑删除
