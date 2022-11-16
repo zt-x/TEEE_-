@@ -177,7 +177,7 @@ public class CourseCon {
                 // 获取历次作业的成绩
                 for (AWork object : objects) {
                     if(object.getIsExam() == 0){
-                        SubmitWork submitWorks1 = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, object.getId()));
+                        SubmitWork submitWorks1 = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, uid).eq(SubmitWork::getWorkTableId, object.getId()));
                         JSONObject jo = new JSONObject();
                         jo.put("WorkName", object.getWorkName());
                         jo.put("score", submitWorks1.getScore());
