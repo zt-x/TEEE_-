@@ -132,9 +132,9 @@ public class CourseCon {
                     System.out.println("sw.score = " + sw.getScore());
                     if(sw.getScore() >= 0.9*total_score){
                         excellent++;
-                    }else if(sw.getScore() > 0.75*total_score){
+                    }else if(sw.getScore() >= 0.75*total_score){
                         good++;
-                    }else if(sw.getScore() > 0.6*total_score){
+                    }else if(sw.getScore() >= 0.6*total_score){
                         NTB++;
                     }else {
                         fail++;
@@ -180,7 +180,7 @@ public class CourseCon {
                         SubmitWork submitWorks1 = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, uid).eq(SubmitWork::getWorkTableId, object.getId()));
                         JSONObject jo = new JSONObject();
                         jo.put("WorkName", object.getWorkName());
-                        jo.put("score", submitWorks1.getScore());
+                        jo.put("score", submitWorks1 == null?"0":submitWorks1.getScore());
                         scores.add(jo);
                     }
                 }
