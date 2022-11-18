@@ -10,4 +10,6 @@ public interface SubmitWorkController {
     Result setSubmitScore(int subid, String score);
     Result getSubmitSummary(int subid);
     Result getSubmitBySid(int sid);
+
+    Result getSubmitByWorkId(String token, int wid);
 }

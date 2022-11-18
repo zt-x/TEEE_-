@@ -214,4 +214,20 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
             return new Result(Code.ERR, null, "Err cause by getSubmitBySid: " + e.getMessage());
         }
     }
+
+    @Override
+    @RequestMapping("/submit/getSubmitByWorkId")
+    @ResponseBody
+    public Result getSubmitByWorkId(@RequestHeader("Authorization") String token,@RequestParam("wid") int wid) {
+        // 获取uid
+        try{
+            Long uid = JWT.getUid(token);
+            Integer sid = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, uid).eq(SubmitWork::getWorkTableId, wid)).getId();
+            Object data = getSubmitBySid(sid).getData();
+            return new Result(Code.Suc, data, "获取成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, null, "Err Cause by getSByWid: " + e.getStackTrace());
+        }
+    }
 }

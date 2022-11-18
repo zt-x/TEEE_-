@@ -129,7 +129,6 @@ public class CourseCon {
             if(max != -1){
                 List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
                 for(SubmitWork sw: submitWorks){
-                    System.out.println("sw.score = " + sw.getScore());
                     if(sw.getScore() >= 0.9*total_score){
                         excellent++;
                     }else if(sw.getScore() >= 0.75*total_score){

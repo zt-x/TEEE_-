@@ -95,4 +95,11 @@ public class ControllerTest {
         String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInJvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjY4NjUyNTM0LCJqdGkiOiIzODk0NzZhOS1iMThiLTQ2ZTEtOGFkYy0zNWZhOTk3ZDBmMTQifQ.TJSuV01M_o1u-VAZGRnTzAW7RCI_dLimr5FgfqqxSmQ";
         System.out.println(courseCon.getAllWorkSummary(25));
     }
+
+    @Test
+    public void getSubmitByWorkId(){
+        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjIwMjAzMTEwMTAwMSwicm9sZSI6InN0dWRlbnQiLCJleHAiOjE2Njg4Mzk3OTEsImp0aSI6ImJmMGYzOGY5LTQyNGQtNGZiMy1iOGY5LWUwNzAzZWUwZGJlMiJ9.JRMsxc7LIUdeOVi3_I9zYkD5kBsJ2YPfhbvzMC4GaZM";
+        SubmitWorkController submitWorkController  = SpringBeanUtil.getBean(SubmitWorkControllerImpl.class);
+        System.out.println(submitWorkController.getSubmitByWorkId(token, 1).getData());
+    }
 }
