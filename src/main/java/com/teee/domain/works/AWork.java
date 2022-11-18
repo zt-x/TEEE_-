@@ -17,6 +17,8 @@ public class AWork {
     Integer autoReadoverChoice;
     @TableField("auto_readover_fill_in")
     Integer autoReadoverFillIn;
+    @TableField("Status")
+    Integer Status;
 
     @TableLogic//逻辑删除
     private Integer deleted;

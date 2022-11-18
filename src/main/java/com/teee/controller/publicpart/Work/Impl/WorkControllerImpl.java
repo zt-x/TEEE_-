@@ -65,6 +65,9 @@ public class WorkControllerImpl implements WorkController {
         // TODO
         // 写入AWorkDao数据库
         try{
+            if (aWork.getDeadline().equals("")) {
+                aWork.setDeadline("9999-12-30");
+            }
             aWorkDao.insert(aWork);
         }catch(Exception e){
             return new Result(Code.ERR, e.getMessage(), "Unknow Err Cause by ReleaseAWork()");
