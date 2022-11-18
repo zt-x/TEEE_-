@@ -88,4 +88,11 @@ public class ControllerTest {
         String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInJvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjY4NjUyNTM0LCJqdGkiOiIzODk0NzZhOS1iMThiLTQ2ZTEtOGFkYy0zNWZhOTk3ZDBmMTQifQ.TJSuV01M_o1u-VAZGRnTzAW7RCI_dLimr5FgfqqxSmQ";
         System.out.println(courseCon.getCourseStatistic(token, 25));
     }
+
+    @Test
+    public void getAllWorkSummary(){
+        CourseCon courseCon = SpringBeanUtil.getBean(CourseCon.class);
+        String token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInJvbGUiOiJ0ZWFjaGVyIiwiZXhwIjoxNjY4NjUyNTM0LCJqdGkiOiIzODk0NzZhOS1iMThiLTQ2ZTEtOGFkYy0zNWZhOTk3ZDBmMTQifQ.TJSuV01M_o1u-VAZGRnTzAW7RCI_dLimr5FgfqqxSmQ";
+        System.out.println(courseCon.getAllWorkSummary(25));
+    }
 }

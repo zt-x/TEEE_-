@@ -194,4 +194,45 @@ public class CourseCon {
             return new Result(Code.ERR, e.getMessage(), "Err Cause by getCourseStatistic" + e.getMessage());
         }
     }
+
+
+    /**
+     * Result:{
+     *     submit_totalNum:
+     *     works:[
+     *          {
+     *              wid:
+     *              subNum:
+     *              rDone:
+     *          }
+     *     ]
+     *     
+     * }
+     * */
+    @RequestMapping("/Course/getAllWorkSummary")
+    @ResponseBody
+    public Result getAllWorkSummary(@RequestParam("cid") Integer cid){
+        try{
+            JSONObject ret = new JSONObject();
+            String uids = courseUserDao.selectById(cid).getUid();
+            int submit_totalNum = uids.length() - uids.replaceAll(",", "").length() + 1;
+            ret.put("submit_totalNum", submit_totalNum);
+            ArrayList<JSONObject> arrayList = new ArrayList<>();
+            List<AWork> aWorks = aWorkDao.selectList(new LambdaQueryWrapper<AWork>().eq(AWork::getCid, cid));
+            for (AWork aWork : aWorks) {
+                int readOver_done = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getFinishReadOver, 1).eq(SubmitWork::getWorkTableId,aWork.getId()));
+                int submit_submitedNum = submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, aWork.getId()));
+                JSONObject jo = new JSONObject();
+                jo.put("wid", aWork.getId());
+                jo.put("subNum", submit_submitedNum);
+                jo.put("rDone", readOver_done);
+                arrayList.add(jo);
+            }
+            ret.put("works", arrayList);
+            return new Result(Code.Suc, ret, "获取成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, null, "Err Cause by CourseCon.getAllWorkSummary: " + e.getStackTrace());
+        }
+    }
 }
