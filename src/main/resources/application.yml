@@ -1,12 +1,19 @@
 server:
   port: 8080
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://124.223.187.100:3306/teee_db
     username: TEEE
     password: teee123456
+path:
+  picPath: D:/testpic/
+  filePath: D:/testfile/
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

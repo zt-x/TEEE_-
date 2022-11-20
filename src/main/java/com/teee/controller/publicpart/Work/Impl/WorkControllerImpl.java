@@ -5,15 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.WorkController;
-import com.teee.dao.AWorkDao;
-import com.teee.dao.BankWorkDao;
-import com.teee.dao.CourseDao;
-import com.teee.dao.SubmitWorkDao;
+import com.teee.dao.*;
 import com.teee.domain.Course;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
+import com.teee.domain.works.WorkTimer;
 import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
@@ -152,5 +150,45 @@ public class WorkControllerImpl implements WorkController {
             jarr2.add(jo2);
         }
         return new Result(Code.Suc, TypeChange.arr2str(jarr2), "获取作业完成状态成功!");
+    }
+
+    @Autowired
+    WorkTimerDao workTimerDao;
+
+    @Override
+    @RequestMapping("/Work/getWorkTimer")
+    @ResponseBody
+    public Result getWorkTimer(@RequestHeader("Authorization") String token, Integer wid) {
+        try{
+            // 获取WorkTimer
+            Long uid = JWT.getUid(token);
+            WorkTimer workTimer = workTimerDao.selectOne(new LambdaQueryWrapper<WorkTimer>().eq(WorkTimer::getUid, uid).eq(WorkTimer::getWid, wid));
+            if(workTimer == null){
+                /************
+                 第一次进入
+                 ************/
+                workTimer = new WorkTimer();
+                workTimer.setUid(uid);
+                workTimer.setWid(wid);
+                System.out.println("UID: " + uid + "! WID: " + wid);
+                AWork aWork = aWorkDao.selectOne(new LambdaQueryWrapper<AWork>().eq(AWork::getId, wid));
+                if(aWork == null){
+                    return new Result(Code.ERR, null, "创建Timer时错误：无法找到作业");
+                }
+                try{
+                    Float timeLimit = aWork.getTimeLimit();
+                    workTimer.setRestTime(String.valueOf(timeLimit*60.0));
+                }catch (NullPointerException npe){
+                    workTimer.setRestTime("无限制");
+                }
+                workTimerDao.insert(workTimer);
+            }
+            return new Result(Code.Suc, workTimer.getRestTime(), "获取Timer成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.Suc, null, "Err cause by WorkControl.getWorkTimer: " + e.getMessage());
+
+        }
+
     }
 }

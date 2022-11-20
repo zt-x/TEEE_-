@@ -44,12 +44,15 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     @RequestMapping("/submit/submitWork")
     @ResponseBody
 
-    public Result SubmitWork(@RequestHeader("Authorization") String token, @RequestParam("wid") int wid, @RequestParam("ans") String ans) {
+    public Result SubmitWork(@RequestHeader("Authorization") String token, @RequestParam("wid") int wid, @RequestParam("ans") String ans, @RequestParam("files") String files) {
         Result res = new Result();
         SubmitWorkContent submitWorkContent = new SubmitWorkContent();
         submitWorkContent.setSubmitContent(ans);
         submitWorkContent.setReadover("");
         submitWorkContent.setFinishReadOver(0);
+        // TODO
+        // files: [{qnum:, qfiles:["", "", ""]}]
+        submitWorkContent.setFiles("".equals(files)?"[]":files);
         submitWorkContentDao.insert(submitWorkContent);
         Integer submitId = submitWorkContent.getSubmitId();
         SubmitWork submitWork = new SubmitWork();

@@ -20,6 +20,7 @@ public class MyFilter implements Filter {
         ArrayList<String> whiteList = new ArrayList<>();
         whiteList.add("/login");
         whiteList.add("/register");
+        whiteList.add("/upload/img");
         if(whiteList.contains(uri)){
             return true;
         }else {

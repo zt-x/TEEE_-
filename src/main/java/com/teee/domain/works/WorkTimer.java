@@ -1,6 +1,7 @@
 package com.teee.domain.works;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -9,15 +10,17 @@ import lombok.Data;
  * @author Xu ZhengTao
  */
 @Data
-@TableName("submit_work_content")
-public class SubmitWorkContent {
+@TableName("work_timer")
+public class WorkTimer {
     @TableId(type = IdType.AUTO)
-    Integer submitId;
-    /** ["","",""]*/
-    String submitContent;
+    Integer id;
 
-    /** [{qscore:, qreadover:}]**/
-    String readover;
-    Integer finishReadOver;
-    String files;
+    @TableField("restTime")
+    String restTime;
+
+    @TableField("uid")
+    Long uid;
+
+    @TableField("wid")
+    Integer wid;
 }

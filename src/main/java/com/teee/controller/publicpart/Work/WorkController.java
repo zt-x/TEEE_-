@@ -14,4 +14,5 @@ public interface WorkController {
     Result getWork(int id);
     Result deleteAWork(Integer wid);
     Result getWorkFinishStatus(String token, Integer cid);
+    Result getWorkTimer(String token, Integer wid);
 }

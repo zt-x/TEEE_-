@@ -12,6 +12,8 @@ public class AWork {
     Integer workId;
     String workName;
     String deadline;
+    @TableField("time_limit")
+    Float timeLimit;
     Integer isExam;
     Float totalScore;
     Integer autoReadoverChoice;

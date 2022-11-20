@@ -46,6 +46,7 @@ public class BankWork {
         this.isTemp = isTemp;
     }
 
+
     public BankWork() {
     }
 }
