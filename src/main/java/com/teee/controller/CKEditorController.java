@@ -6,6 +6,7 @@ import com.teee.config.Code;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.returnClass.UploadErr;
 import com.teee.domain.returnClass.UploadResult;
+import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -62,26 +64,31 @@ public class CKEditorController {
     }
     @RequestMapping("/file")
     @ResponseBody
-    public Result uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public Result uploadFile(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
         JSONObject ret = new JSONObject();
-        if(file.isEmpty()){
-            ret.put("err", "空文件");
-            return new Result(Code.ERR, null, "空文件");
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (MultipartFile multipartFile : file) {
+            if(multipartFile.isEmpty()){
+                ret.put("err", "空文件");
+                return new Result(Code.ERR, null, "空文件");
+            }
+            String fileName = multipartFile.getOriginalFilename();
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));
+            System.out.println("上传: " + fileName + ", 后缀: " + suffixName);
+            File fileTempObj = new File(filePath + File.separator + "TimeStamp_" +  System.currentTimeMillis() + "_" + fileName);
+            if(!fileTempObj.getParentFile().exists()){
+                fileTempObj.getParentFile().mkdirs();
+            }
+            try{
+                multipartFile.transferTo(fileTempObj);
+            }catch (Exception e){
+                e.printStackTrace();
+                return new Result(Code.ERR, null, "写入文件失败: " + fileTempObj.getName());
+            }
+            arrayList.add(fileTempObj.getPath());
         }
-        String fileName = file.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        System.out.println("上传: " + fileName + ", 后缀: " + suffixName);
-        File fileTempObj = new File(filePath + File.separator + fileName + "TimeStamp:" +  System.currentTimeMillis());
-        if(!fileTempObj.getParentFile().exists()){
-            fileTempObj.getParentFile().mkdirs();
-        }
-        try{
-            file.transferTo(fileTempObj);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(Code.ERR, null, "写入文件失败: " + fileTempObj.getName());
-        }
-        return new Result(Code.Suc, fileName + "|" + ((double) fileTempObj.length() / 1024 / 1024));
+        return new Result(Code.Suc, TypeChange.arrL2str(arrayList), "上传成功！");
+//        return new Result(Code.Suc, fileName + "|" + ((double) fileTempObj.length() / 1024 / 1024));
     }
 
 }
