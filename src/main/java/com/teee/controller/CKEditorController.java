@@ -8,15 +8,25 @@ import com.teee.domain.returnClass.UploadErr;
 import com.teee.domain.returnClass.UploadResult;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -30,7 +40,7 @@ public class CKEditorController {
     @Value("${path.picPath}")
     private String picPath;
 
-    @Value("${path.picPath}")
+    @Value("${path.filePath}")
     private String filePath;
 
     @Value("${server.port}")
@@ -39,12 +49,31 @@ public class CKEditorController {
     @RequestMapping("/img")
     @ResponseBody
     public UploadResult uploadImg(@RequestParam("upload") MultipartFile file, HttpServletRequest request){
+        ArrayList<String> suffixWhiteList = new ArrayList<>();
+        suffixWhiteList.add("png");
+        suffixWhiteList.add("jpg");
+        suffixWhiteList.add("jpeg");
+        suffixWhiteList.add("gif");
+        suffixWhiteList.add("ico");
+        suffixWhiteList.add("cur");
+        suffixWhiteList.add("jfif");
+        suffixWhiteList.add("pjpeg");
+        suffixWhiteList.add("pjp");
+        suffixWhiteList.add("svg");
+        suffixWhiteList.add("tif");
+        suffixWhiteList.add("webp");
+        suffixWhiteList.add("tiff");
         System.out.println("进入upload");
         if(file == null){
             return new UploadResult(0, new UploadErr("未发现上传的文件"));
         }
         String originalFilename = file.getOriginalFilename();
         String appendName = originalFilename.substring(originalFilename.lastIndexOf("."));
+        if(!suffixWhiteList.contains(appendName)){
+            return new UploadResult(0, new UploadErr("仅支持拖拽上传图片，若上传附件，请通过添加附件按钮上传"));
+
+//            return new UploadResult(0, new UploadErr("不支持的图像格式"));
+        }
         System.out.println("origin: " + originalFilename);
         System.out.println("appendName: " + appendName);
         File newMkdir = new File(picPath);
@@ -85,10 +114,37 @@ public class CKEditorController {
                 e.printStackTrace();
                 return new Result(Code.ERR, null, "写入文件失败: " + fileTempObj.getName());
             }
-            arrayList.add(fileTempObj.getPath());
+            arrayList.add("\"" + fileTempObj.getName() + "\"");
         }
         return new Result(Code.Suc, TypeChange.arrL2str(arrayList), "上传成功！");
 //        return new Result(Code.Suc, fileName + "|" + ((double) fileTempObj.length() / 1024 / 1024));
+    }
+
+    @RequestMapping("/getFile")
+    @ResponseBody
+    public Result downloadFile(@RequestParam("fileName") String fileName, HttpServletResponse response) throws UnsupportedEncodingException {
+        File file = new File(filePath + File.separator + fileName);
+        String substring = fileName.substring(fileName.lastIndexOf("_")+1);
+        String fileOriginName = substring.substring(substring.lastIndexOf("_")+1);
+        if(!file.exists()){
+            return new Result(Code.ERR, null, "文件不存在");
+        }
+        response.reset();
+        response.setContentType("application/octet-stream");
+        response.setCharacterEncoding("utf-8");
+        response.setContentLength((int)file.length());
+        response.setHeader("Content-Disposition",URLEncoder.encode(fileOriginName, "UTF-8"));
+
+        try {
+            byte[] bytes = FileCopyUtils.copyToByteArray(file);
+            OutputStream os = response.getOutputStream();
+            os.write(bytes);
+//            return new Result(Code.Suc, null, "下载启动成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Result(Code.ERR, null, "下载启动失败");
+        }
+        return null;
     }
 
 }

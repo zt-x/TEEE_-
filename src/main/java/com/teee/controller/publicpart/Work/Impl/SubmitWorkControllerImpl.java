@@ -24,6 +24,7 @@ import java.util.List;
 
 @Controller
 public class SubmitWorkControllerImpl implements SubmitWorkController {
+
     @Autowired
     SubmitService submitService;
 
@@ -51,7 +52,7 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
         submitWorkContent.setReadover("");
         submitWorkContent.setFinishReadOver(0);
         // TODO
-        // files: [{qnum:, qfiles:["", "", ""]}]
+//         files: [["", "", ""]}]
         submitWorkContent.setFiles("".equals(files)?"[]":files);
         submitWorkContentDao.insert(submitWorkContent);
         Integer submitId = submitWorkContent.getSubmitId();
