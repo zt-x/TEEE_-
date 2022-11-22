@@ -161,7 +161,7 @@ public class CKEditorController {
      *  2.不通过安全检测 (TODO)
      * */
     public int checkFile(MultipartFile file){
-        int maxSizeMB = 50;
+        int maxSizeMB = 200;
         if ((file.getSize() / (1024*1024)) > maxSizeMB ){
             return 1;
         }
