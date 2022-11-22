@@ -204,6 +204,7 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
     @ResponseBody
     public Result getSubmitBySid(@RequestParam("sid") int sid) {
         try{
+
             SubmitWorkContent submitWorkContent = submitWorkContentDao.selectById(sid);
 
             // 给Content的每一项加上引号
@@ -212,6 +213,13 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
                 arrayList.set(i, "\"" + arrayList.get(i) + "\"");
             }
             submitWorkContent.setSubmitContent(arrayList.toString());
+
+            // 给Files的每一项加上引号
+            ArrayList<String> arrayList2 = TypeChange.str2arrl(submitWorkContent.getFiles(), ", ");
+            for (int i = 0; i < arrayList2.size(); i++) {
+                arrayList2.set(i, "\"" + arrayList2.get(i) + "\"");
+            }
+            submitWorkContent.setFiles(arrayList2.toString());
 
             return new Result(Code.Suc, JSONObject.toJSONString(submitWorkContent), "获取sid=" + sid + "的数据成功");
         }catch (Exception e){
