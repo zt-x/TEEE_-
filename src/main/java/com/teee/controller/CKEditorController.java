@@ -46,6 +46,9 @@ public class CKEditorController {
     @Value("${server.port}")
     private String port;
 
+    @Value("${realMaxFileSizeMB}")
+    private int maxSizeMB;
+
     @RequestMapping("/img")
     @ResponseBody
     public UploadResult uploadImg(@RequestParam("upload") MultipartFile file, HttpServletRequest request){
@@ -94,37 +97,46 @@ public class CKEditorController {
     @RequestMapping("/file")
     @ResponseBody
     public Result uploadFile(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
-        // 文件校验
-        for (MultipartFile multipartFile : file) {
-            if(checkFile(multipartFile)!=0){
-                return new Result(Code.ERR, multipartFile.getOriginalFilename(),"文件上传失败");
+        try{
+            System.out.println("进入上传队列 ...");
+            // 文件校验
+            for (MultipartFile multipartFile : file) {
+                int check =checkFile(multipartFile);
+                if(check!=0){
+                    if(check==1){
+                        return new Result(Code.ERR,null ,"文件:" +multipartFile.getOriginalFilename()+"超出大小限制(" + maxSizeMB + "MB)");
+                    }
+                }
             }
+
+            JSONObject ret = new JSONObject();
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (MultipartFile multipartFile : file) {
+                if(multipartFile.isEmpty()){
+                    ret.put("err", "空文件");
+                    return new Result(Code.ERR, null, "空文件");
+                }
+                String fileName = multipartFile.getOriginalFilename();
+                String suffixName = fileName.substring(fileName.lastIndexOf("."));
+                System.out.println("上传: " + fileName + ", 后缀: " + suffixName);
+                File fileTempObj = new File(filePath + File.separator + "TimeStamp_" +  System.currentTimeMillis() + "_" + fileName);
+                if(!fileTempObj.getParentFile().exists()){
+                    fileTempObj.getParentFile().mkdirs();
+                }
+                try{
+                    multipartFile.transferTo(fileTempObj);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return new Result(Code.ERR, null, "写入文件失败: " + fileTempObj.getName());
+                }
+                arrayList.add("\"" + fileTempObj.getName() + "\"");
+            }
+            return new Result(Code.Suc, TypeChange.arrL2str(arrayList), "上传成功！");
+//        return new Result(Code.Suc, fileName + "|" + ((double) fileTempObj.length() / 1024 / 1024));
+        }catch (Exception e){
+            return new Result(Code.ERR, e.getMessage(), "Err Cause by UploadController");
         }
 
-        JSONObject ret = new JSONObject();
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (MultipartFile multipartFile : file) {
-            if(multipartFile.isEmpty()){
-                ret.put("err", "空文件");
-                return new Result(Code.ERR, null, "空文件");
-            }
-            String fileName = multipartFile.getOriginalFilename();
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));
-            System.out.println("上传: " + fileName + ", 后缀: " + suffixName);
-            File fileTempObj = new File(filePath + File.separator + "TimeStamp_" +  System.currentTimeMillis() + "_" + fileName);
-            if(!fileTempObj.getParentFile().exists()){
-                fileTempObj.getParentFile().mkdirs();
-            }
-            try{
-                multipartFile.transferTo(fileTempObj);
-            }catch (Exception e){
-                e.printStackTrace();
-                return new Result(Code.ERR, null, "写入文件失败: " + fileTempObj.getName());
-            }
-            arrayList.add("\"" + fileTempObj.getName() + "\"");
-        }
-        return new Result(Code.Suc, TypeChange.arrL2str(arrayList), "上传成功！");
-//        return new Result(Code.Suc, fileName + "|" + ((double) fileTempObj.length() / 1024 / 1024));
     }
 
     @RequestMapping("/getFile")
@@ -161,7 +173,7 @@ public class CKEditorController {
      *  2.不通过安全检测 (TODO)
      * */
     public int checkFile(MultipartFile file){
-        int maxSizeMB = 200;
+
         if ((file.getSize() / (1024*1024)) > maxSizeMB ){
             return 1;
         }

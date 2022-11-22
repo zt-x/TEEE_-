@@ -52,7 +52,7 @@ public class SubmitWorkControllerImpl implements SubmitWorkController {
         submitWorkContent.setReadover("");
         submitWorkContent.setFinishReadOver(0);
         // TODO
-//         files: [["", "", ""]}]
+//         files: [["", "", ""],[]]
         submitWorkContent.setFiles("".equals(files)?"[]":files);
         submitWorkContentDao.insert(submitWorkContent);
         Integer submitId = submitWorkContent.getSubmitId();
