@@ -94,6 +94,13 @@ public class CKEditorController {
     @RequestMapping("/file")
     @ResponseBody
     public Result uploadFile(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){
+        // 文件校验
+        for (MultipartFile multipartFile : file) {
+            if(checkFile(multipartFile)!=0){
+                return new Result(Code.ERR, multipartFile.getOriginalFilename(),"文件上传失败");
+            }
+        }
+
         JSONObject ret = new JSONObject();
         ArrayList<String> arrayList = new ArrayList<>();
         for (MultipartFile multipartFile : file) {
@@ -147,4 +154,24 @@ public class CKEditorController {
         return null;
     }
 
+    /**
+     * 返回值：
+     *  0.通过校验
+     *  1.文件大小太大
+     *  2.不通过安全检测 (TODO)
+     * */
+    public int checkFile(MultipartFile file){
+        int maxSizeMB = 50;
+        if ((file.getSize() / (1024*1024)) > maxSizeMB ){
+            return 1;
+        }
+        /* TODO
+        else if (){
+
+        }
+         */
+        else{
+            return 0;
+        }
+    }
 }
