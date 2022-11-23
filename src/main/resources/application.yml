@@ -12,8 +12,8 @@ spring:
     username: TEEE
     password: teee123456
 path:
-  picPath: D:/testpic/
-  filePath: D:/testfile/
+  picPath: /usr/local/myPic
+  filePath: /usr/local/myFile
 realMaxFileSizeMB: 50
 #mybatis-plus:
 #  configuration:

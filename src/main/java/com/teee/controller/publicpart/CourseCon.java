@@ -125,21 +125,27 @@ public class CourseCon {
             int good = 0;
             int NTB = 0;
             int fail = 0;
-            Float total_score = aWorkDao.selectById(max).getTotalScore();
-            if(max != -1){
-                List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
-                for(SubmitWork sw: submitWorks){
-                    if(sw.getScore() >= 0.9*total_score){
-                        excellent++;
-                    }else if(sw.getScore() >= 0.75*total_score){
-                        good++;
-                    }else if(sw.getScore() >= 0.6*total_score){
-                        NTB++;
-                    }else {
-                        fail++;
+            AWork aWork = aWorkDao.selectById(max);
+            if(aWork == null){
+                Float total_score = Float.valueOf(0);
+            }else{
+                Float total_score = aWorkDao.selectById(max).getTotalScore();
+                if(max != -1){
+                    List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
+                    for(SubmitWork sw: submitWorks){
+                        if(sw.getScore() >= 0.9*total_score){
+                            excellent++;
+                        }else if(sw.getScore() >= 0.75*total_score){
+                            good++;
+                        }else if(sw.getScore() >= 0.6*total_score){
+                            NTB++;
+                        }else {
+                            fail++;
+                        }
                     }
                 }
             }
+
             // 获取考试成绩
 
             ArrayList<Integer> arr = new ArrayList<>();
