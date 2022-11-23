@@ -133,14 +133,19 @@ public class TeacherCourseControllerImpl implements TeacherCourseController {
                 ret.put("uid", userInfo.getUid());
                 ret.put("username", userInfo.getUsername());
                 ret.put("avatar", userInfo.getAvatar());
-                ret.put("finishWorkNum", submitWorkDao.selectCount(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, userInfo.getUid())));
                 List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, userInfo.getUid()));
                 float avarage = 0;
+                int fwn = 0;
                 for (SubmitWork submitWork : submitWorks) {
-                    avarage += submitWork.getScore();
+                    if(wids.contains(submitWork.getWorkTableId())){
+                        avarage += submitWork.getScore();
+                        fwn++;
+                    }
                 }
                 avarage = avarage/ (submitWorks.size() == 0?1:submitWorks.size());
                 ret.put("workAverageScore", avarage);
+                ret.put("finishWorkNum", fwn);
+
                 jarr.add(ret);
             }
             return new Result(Code.Suc, TypeChange.arr2str(jarr), "获取用户成功");
