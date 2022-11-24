@@ -30,6 +30,37 @@ public class BankControllerImpl implements BankController {
     @Autowired
     BankWorkDao bankWorkDao;
 
+
+    @Override
+    public Result getWorkBankByTid(String token) {
+        return null;
+    }
+
+    @Override
+    public Result editWorkBank(BankWork bankWork) {
+        return null;
+    }
+
+    @Override
+    public Result deleteWorkBank(Integer wbid) {
+        return null;
+    }
+
+    @Override
+    public Result addWorkBank(String token, BankQuestion bankQuestion) {
+        return null;
+    }
+
+    @Override
+    public Result editQueBank(BankQuestion bankQuestion) {
+        return null;
+    }
+
+    @Override
+    public Result deleteQueBank(Integer qbid) {
+        return null;
+    }
+
     @Override
     @RequestMapping("/Bank/getQueBankByTid")
     @ResponseBody
