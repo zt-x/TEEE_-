@@ -84,7 +84,7 @@ public class AutoReadOver {
                 // 填空题
                 else if (jo.get("qtype").equals(Code.QueType_fillin_question)) {
                     try{
-                        String ans = submitContent.get(i);
+                        String ans = submitContent.get(i).replaceAll("&douhao;", ",");
                         String cans = jo.getString("cans");
                         if(cans.equals(ans)){
                             readOver.set(i, String.valueOf(qscore));
