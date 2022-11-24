@@ -79,15 +79,11 @@ public class QuestionBankServiceImpl implements QuestionBankService{
                 for (String s : arrayList) {
                     JSONObject o = new JSONObject();
                     BankQuestion bankQuestion = bankQuestionDao.selectById(Integer.valueOf(s));
-                    if(bankQuestion.getIsTemp() == 1){
-                        continue;
-                    }else {
-                        o.put("id", bankWork.getWorkId());
-                        o.put("isPrivate", bankWork.getIsPrivate());
-                        o.put("bankName", bankWork.getWorkName());
-                        o.put("tags", bankWork.getTags());
-                        jarr.add(o);
-                    }
+                    o.put("id", bankQuestion.getBankId());
+                    o.put("isPrivate", bankWork.getIsPrivate());
+                    o.put("bankName", bankWork.getWorkName());
+                    o.put("tags", bankWork.getTags());
+                    jarr.add(o);
                 }
                 return new BooleanReturn(true, jarr);
             }else{
