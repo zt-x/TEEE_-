@@ -1,9 +1,15 @@
 package com.teee.service.HomeWork.Questions;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.teee.dao.BankOwnerDao;
 import com.teee.dao.BankQuestionDao;
 import com.teee.domain.returnClass.BooleanReturn;
+import com.teee.domain.returnClass.Result;
+import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankQuestion;
+import com.teee.domain.works.BankWork;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +25,8 @@ public class QuestionBankServiceImpl implements QuestionBankService{
 
     @Autowired
     BankQuestionDao bankQuestionDao;
-
+    @Autowired
+    BankOwnerDao bankOwnerDao;
     @Override
     public BooleanReturn createQuestionBank(String bankName, Integer bankType, String questions, Long owner) {
         try{
@@ -60,10 +67,35 @@ public class QuestionBankServiceImpl implements QuestionBankService{
     }
 
     @Override
-    public List<BankQuestion> getQuestionBankByOnwer(Long tid) {
-        LambdaQueryWrapper<BankQuestion> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(BankQuestion::getOwner, tid);
-        return bankQuestionDao.selectList(lambdaQueryWrapper);
+    public BooleanReturn getQuestionBankByOnwer(Long tid) {
+        Result res = new Result();
+        JSONArray jarr = new JSONArray();
+        LambdaQueryWrapper<BankOwner> lqw = new LambdaQueryWrapper<>();
+        try{
+            BankOwner bankOwner = bankOwnerDao.selectOne(lqw.eq(BankOwner::getOid, tid).eq(BankOwner::getBankType, 1));
+            String bids = bankOwner.getBids();
+            ArrayList<String> arrayList = TypeChange.str2arrl(bids);
+            if(arrayList.size() > 0){
+                for (String s : arrayList) {
+                    JSONObject o = new JSONObject();
+                    BankQuestion bankQuestion = bankQuestionDao.selectById(Integer.valueOf(s));
+                    if(bankQuestion.getIsTemp() == 1){
+                        continue;
+                    }else {
+                        o.put("id", bankWork.getWorkId());
+                        o.put("isPrivate", bankWork.getIsPrivate());
+                        o.put("bankName", bankWork.getWorkName());
+                        o.put("tags", bankWork.getTags());
+                        jarr.add(o);
+                    }
+                }
+                return new BooleanReturn(true, jarr);
+            }else{
+                return new BooleanReturn(false, "列表为空");
+            }
+        }catch(Exception e){
+            return new BooleanReturn(false, "Err: " + e.getMessage());
+        }
     }
 
     @Override

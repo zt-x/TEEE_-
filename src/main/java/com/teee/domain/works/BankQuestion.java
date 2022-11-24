@@ -26,7 +26,7 @@ public class BankQuestion {
     private String questions;
     private Long owner;
     private String tags;
-
+    private Integer isPrivate;
     public BankQuestion(String bankName, Integer bankType, String questions, Long owner, String tags) {
         this.bankName = bankName;
         this.bankType = bankType;

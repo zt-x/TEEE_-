@@ -23,6 +23,8 @@ public class BankWork {
 
     private Integer isTemp;
 
+    private Integer isPrivate;
+
     public BankWork(String workName) {
         this.workName = workName;
     }

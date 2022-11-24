@@ -4,16 +4,21 @@ import lombok.Data;
 
 @Data
 public class BooleanReturn {
-    boolean bool;
+    boolean success;
     String msg;
-
+    Object data;
     public BooleanReturn(boolean bool, String msg) {
-        this.bool = bool;
+        this.success = bool;
         this.msg = msg;
     }
 
+    public BooleanReturn(boolean bool, Object data) {
+        this.success = bool;
+        this.data = data;
+    }
+
     public BooleanReturn(boolean bool) {
-        this.bool = bool;
+        this.success = bool;
     }
 
     public static BooleanReturn rt(boolean bool, String msg){
@@ -26,7 +31,7 @@ public class BooleanReturn {
     @Override
     public String toString() {
         return "BooleanReturn{" +
-                "bool=" + bool +
+                "bool=" + success +
                 ", msg='" + msg + '\'' +
                 '}';
     }

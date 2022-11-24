@@ -15,6 +15,6 @@ public interface QuestionBankService {
     BooleanReturn deleteQuestionBank(Integer bankId);
     BooleanReturn editQuestionsBank(BankQuestion bankQuestion);
     BankQuestion getQuestionBankById(Integer baknId);
-    List<BankQuestion> getQuestionBankByOnwer(Long tid);
+    BooleanReturn getQuestionBankByOnwer(Long owner);
     BooleanReturn addBankTags(Integer bankId, ArrayList<String> tags);
 }

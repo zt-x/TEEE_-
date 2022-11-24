@@ -1,10 +1,18 @@
 package com.teee.service.HomeWork.Works;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.teee.config.Code;
+import com.teee.dao.BankOwnerDao;
 import com.teee.dao.BankWorkDao;
 import com.teee.domain.returnClass.BooleanReturn;
+import com.teee.domain.returnClass.Result;
+import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
+import com.teee.utils.JWT;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +24,11 @@ import java.util.List;
  * @author Xu ZhengTao
  */
 @Service
-public class WorkServiceImpl implements WorkService{
+public class WorkBankServiceImpl implements WorkBankService {
     @Autowired
     BankWorkDao bankWorkDao;
+    @Autowired
+    BankOwnerDao bankOwnerDao;
     @Override
     public BooleanReturn createWorkBank(String workName, String questions, Long owner, Integer isTemp) {
         try {
@@ -56,10 +66,35 @@ public class WorkServiceImpl implements WorkService{
     }
 
     @Override
-    public List<BankWork> getWorkBankByOnwer(Long owner) {
-        LambdaQueryWrapper<BankWork> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(BankWork::getOwner, owner);
-        return bankWorkDao.selectList(lambdaQueryWrapper);
+    public BooleanReturn getWorkBankByOnwer(Long tid) {
+        Result res = new Result();
+        JSONArray jarr = new JSONArray();
+        LambdaQueryWrapper<BankOwner> lqw = new LambdaQueryWrapper<>();
+        try{
+            BankOwner bankOwner = bankOwnerDao.selectOne(lqw.eq(BankOwner::getOid, tid).eq(BankOwner::getBankType, 0));
+            String bids = bankOwner.getBids();
+            ArrayList<String> arrayList = TypeChange.str2arrl(bids);
+            if(arrayList.size() > 0){
+                for (String s : arrayList) {
+                    JSONObject o = new JSONObject();
+                    BankWork bankWork = bankWorkDao.selectById(Integer.valueOf(s));
+                    if(bankWork.getIsTemp() == 1){
+                        continue;
+                    }else {
+                        o.put("id", bankWork.getWorkId());
+                        o.put("isPrivate", bankWork.getIsPrivate());
+                        o.put("bankName", bankWork.getWorkName());
+                        o.put("tags", bankWork.getTags());
+                        jarr.add(o);
+                    }
+                }
+                return new BooleanReturn(true, jarr);
+            }else{
+                return new BooleanReturn(false, "列表为空");
+            }
+        }catch(Exception e){
+            return new BooleanReturn(false, "Err: " + e.getMessage());
+        }
     }
     @Override
     public BooleanReturn addBankTags(Integer workId, ArrayList<String> tags) {
