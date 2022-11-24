@@ -6,8 +6,6 @@ import com.teee.domain.works.BankWork;
 import com.teee.service.HomeWork.Questions.QuestionBankService;
 
 public interface BankController {
-    //通用
-    Result getAllBankByTid(String token);
 
     //作业库
     Result addWorkBank(String token, BankWork bankWork);

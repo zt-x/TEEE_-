@@ -13,7 +13,7 @@ import java.util.List;
  * @author Xu ZhengTao
  */
 public interface WorkBankService {
-    BooleanReturn createWorkBank(String workName,String questions,Long owner, Integer isTemp);
+    BooleanReturn createWorkBank(BankWork bankWork, Long tid);
     BooleanReturn deleteWorkBank(Integer work_id);
     BooleanReturn editWorksBank(BankWork bankWork);
     BankWork getWorkBankById(Integer work_id);

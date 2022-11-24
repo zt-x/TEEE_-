@@ -58,6 +58,7 @@ public class BankControllerImpl implements BankController {
         }
     }
 
+
     @Override
     public Result editWorkBank(BankWork bankWork) {
         return null;
@@ -88,39 +89,12 @@ public class BankControllerImpl implements BankController {
     @RequestMapping("/Bank/getQueBankByTid")
     @ResponseBody
     public Result getQueBankByTid(@RequestHeader("Authorization") String token) {
-        BooleanReturn ret = workBankService.getWorkBankByOnwer(JWT.getUid(token));
+        BooleanReturn ret = questionBankService.getQuestionBankByOnwer(JWT.getUid(token));
         if(ret.isSuccess()){
             return new Result(Code.Suc, ret.getData(),"获取成功");
         }else{
             return new Result(Code.ERR, null, ret.getMsg());
         }
-
-        Result res = new Result();
-        JSONArray jarr = new JSONArray();
-        LambdaQueryWrapper<BankQuestion> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(BankQuestion::getOwner, tid);
-        try{
-            List<BankQuestion> bankQuestions = bankQuestionDao.selectList(lqw);
-            if(bankQuestions.size() > 0){
-                for (BankQuestion bankQuestion : bankQuestions) {
-                    JSONObject o = (JSONObject) JSONObject.toJSON(bankQuestion);
-                    jarr.add(o);
-                }
-                res.setCode(Code.Bank_getQueSucc);
-                res.setMsg("获取成功");
-                ArrayList<String> as = new ArrayList<>(jarr);
-                res.setData(as);
-            }else{
-                res.setCode(Code.Bank_noQue);
-                res.setMsg("列表为空");
-                res.setData(null);
-            }
-        }catch(Exception e){
-            res.setCode(Code.ERR);
-            res.setMsg("【BankControllerErr】Err: " + e.getMessage());
-            res.setData(null);
-        }
-        return res;
     }
 
     @Override
@@ -128,41 +102,11 @@ public class BankControllerImpl implements BankController {
     @ResponseBody
     public Result addWorkBank(@RequestHeader("Authorization") String token, @RequestBody BankWork bankWork) {
         Long tid = JWT.getUid(token);
-        Result r = new Result();
-        bankWork.setOwner(tid);
-
-        try{
-            bankWorkDao.insert(bankWork);
-            // 注册到BankOwner表
-            try{
-                BankOwner bankOwner = bankOwnerDao.selectOne(new LambdaQueryWrapper<BankOwner>().eq(BankOwner::getOid, tid));
-                if(bankOwner != null){
-                    String bids = bankOwner.getBids();
-                    ArrayList<String> arrayList = TypeChange.str2arrl(bids);
-                    arrayList.add(bankWork.getWorkId().toString());
-                    bankOwner.setBids(TypeChange.arrL2str(arrayList));
-                    bankOwnerDao.updateById(bankOwner);
-                }else{
-                    bankOwner = new BankOwner();
-                    bankOwner.setOid(tid);
-                    bankOwner.setBids("[]");
-                    bankOwnerDao.insert(bankOwner);
-                }
-                r.setCode(Code.Suc);
-                r.setData(bankWork.getWorkId());
-                r.setMsg("添加成功");
-            }catch (Exception e){
-                e.printStackTrace();
-                r.setCode(Code.ERR);
-                r.setData(null);
-                r.setMsg("添加失败");
-            }
-
-        }catch(Exception e){
-            r.setCode(Code.ERR);
-            r.setData(null);
-            r.setMsg("添加失败");
+        BooleanReturn ret = workBankService.createWorkBank(bankWork, tid);
+        if(ret.isSuccess()){
+            return new Result(Code.Suc, null, ret.getMsg());
+        }else{
+            return new Result(Code.ERR, null, ret.getMsg());
         }
-        return r;
     }
 }

@@ -29,15 +29,35 @@ public class WorkBankServiceImpl implements WorkBankService {
     BankWorkDao bankWorkDao;
     @Autowired
     BankOwnerDao bankOwnerDao;
+
     @Override
-    public BooleanReturn createWorkBank(String workName, String questions, Long owner, Integer isTemp) {
+    public BooleanReturn createWorkBank(BankWork bankWork, Long tid) {
         try {
-            BankWork bankWork = new BankWork(workName,questions,owner,"[]", isTemp);
+            bankWork.setOwner(tid);
             bankWorkDao.insert(bankWork);
+                // 注册到BankOwner表
+            try{
+                BankOwner bankOwner = bankOwnerDao.selectOne(new LambdaQueryWrapper<BankOwner>().eq(BankOwner::getOid, tid));
+                if(bankOwner != null){
+                    String bids = bankOwner.getBids();
+                    ArrayList<String> arrayList = TypeChange.str2arrl(bids);
+                    arrayList.add(bankWork.getWorkId().toString());
+                    bankOwner.setBids(TypeChange.arrL2str(arrayList));
+                    bankOwnerDao.updateById(bankOwner);
+                }else{
+                    bankOwner = new BankOwner();
+                    bankOwner.setOid(tid);
+                    bankOwner.setBids("[]");
+                    bankOwnerDao.insert(bankOwner);
+                }
+                return new BooleanReturn(true);
+            }catch (Exception e){
+                e.printStackTrace();
+                return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());
+            }
         }catch (Exception e){
             return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());
         }
-        return BooleanReturn.rt(true);
     }
     @Override
     public BooleanReturn deleteWorkBank(Integer workId) {
@@ -85,6 +105,7 @@ public class WorkBankServiceImpl implements WorkBankService {
                         o.put("isPrivate", bankWork.getIsPrivate());
                         o.put("bankName", bankWork.getWorkName());
                         o.put("tags", bankWork.getTags());
+                        o.put("author", bankWork.getOwner());
                         jarr.add(o);
                     }
                 }
