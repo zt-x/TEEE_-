@@ -71,5 +71,18 @@ public class SubmitWork {
             return null;
         }
     }
+    public static JSONArray getWorkCotentByWBID(Integer wbid){
+        try{
+            AWorkDao aWorkDao = SpringBeanUtil.getBean(AWorkDao.class);
+            BankWorkDao bankWorkDao = SpringBeanUtil.getBean(BankWorkDao.class);
+            BankWork bankWork = bankWorkDao.selectById(wbid);
+            String questions = bankWork.getQuestions();
+            JSONArray jsonArray = TypeChange.str2Jarr(questions);
+            return jsonArray;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

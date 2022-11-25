@@ -91,6 +91,7 @@ public class QuestionBankServiceImpl implements QuestionBankService{
                 return new BooleanReturn(false, "列表为空");
             }
         }catch(Exception e){
+            e.printStackTrace();
             return new BooleanReturn(false, "Err: " + e.getMessage());
         }
     }

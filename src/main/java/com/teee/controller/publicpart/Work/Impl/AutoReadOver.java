@@ -22,7 +22,6 @@ public class AutoReadOver {
     public SubmitWork autoReadOver(SubmitWork submitWork, boolean readChoice, boolean readFillIn) {
         System.out.println("进入AutoReadOver");
         SubmitWorkContentDao submitWorkContentDao = SpringBeanUtil.getBean(SubmitWorkContentDao.class);
-        BankWorkDao bankWorkDao = SpringBeanUtil.getBean(BankWorkDao.class);
         AWorkDao aWorkDao = SpringBeanUtil.getBean(AWorkDao.class);
         SubmitWorkDao submitWorkDao = SpringBeanUtil.getBean(SubmitWorkDao.class);
         SubmitWork sw = submitWork;

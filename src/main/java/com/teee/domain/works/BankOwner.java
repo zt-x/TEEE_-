@@ -1,14 +1,18 @@
 package com.teee.domain.works;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+/**
+ * @author Xu ZhengTao
+ */
 @Data
 @TableName("bank_owner")
 public class BankOwner {
-    @TableId("id")
+    @TableId(value = "id", type = IdType.AUTO)
     Integer id;
     @TableField("owner_id")
     Long oid;

@@ -1,18 +1,21 @@
 package com.teee.service.HomeWork.Works;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.teee.config.Code;
+import com.teee.dao.AWorkDao;
 import com.teee.dao.BankOwnerDao;
 import com.teee.dao.BankWorkDao;
+import com.teee.dao.UserInfoDao;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
+import com.teee.domain.works.AWork;
 import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
 import com.teee.utils.JWT;
+import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,31 +32,37 @@ public class WorkBankServiceImpl implements WorkBankService {
     BankWorkDao bankWorkDao;
     @Autowired
     BankOwnerDao bankOwnerDao;
-
+    @Autowired
+    AWorkDao aWorkDao;
     @Override
     public BooleanReturn createWorkBank(BankWork bankWork, Long tid) {
         try {
             bankWork.setOwner(tid);
             bankWorkDao.insert(bankWork);
                 // 注册到BankOwner表
-            try{
-                BankOwner bankOwner = bankOwnerDao.selectOne(new LambdaQueryWrapper<BankOwner>().eq(BankOwner::getOid, tid));
-                if(bankOwner != null){
-                    String bids = bankOwner.getBids();
-                    ArrayList<String> arrayList = TypeChange.str2arrl(bids);
-                    arrayList.add(bankWork.getWorkId().toString());
-                    bankOwner.setBids(TypeChange.arrL2str(arrayList));
-                    bankOwnerDao.updateById(bankOwner);
-                }else{
-                    bankOwner = new BankOwner();
-                    bankOwner.setOid(tid);
-                    bankOwner.setBids("[]");
-                    bankOwnerDao.insert(bankOwner);
+            if(bankWork.getIsTemp() == 0){
+                try{
+                    BankOwner bankOwner = bankOwnerDao.selectOne(new LambdaQueryWrapper<BankOwner>().eq(BankOwner::getOid, tid).eq(BankOwner::getBankType, 0));
+                    if(bankOwner != null){
+                        String bids = bankOwner.getBids();
+                        ArrayList<String> arrayList = TypeChange.str2arrl(bids);
+                        arrayList.add(bankWork.getWorkId().toString());
+                        bankOwner.setBids(TypeChange.arrL2str(arrayList));
+                        bankOwnerDao.updateById(bankOwner);
+                    }else{
+                        bankOwner = new BankOwner();
+                        bankOwner.setOid(tid);
+                        bankOwner.setBids("[" + bankWork.getWorkId() + "]");
+                        bankOwner.setBankType(0);
+                        bankOwnerDao.insert(bankOwner);
+                    }
+                    return new BooleanReturn(true, bankWork.getWorkId());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());
                 }
-                return new BooleanReturn(true);
-            }catch (Exception e){
-                e.printStackTrace();
-                return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());
+            }else{
+                return new BooleanReturn(true, bankWork.getWorkId());
             }
         }catch (Exception e){
             return  BooleanReturn.rt(false, "createWorkBank ERR: " + e.getMessage());
@@ -86,13 +95,67 @@ public class WorkBankServiceImpl implements WorkBankService {
     }
 
     @Override
+    /**
+     * return{
+     *     bankName:
+     *     isPrivate:
+     *     author:
+     *     usedTiems:
+     *     Tags:[]
+     *     numOfQue:[0,0,0]
+     *
+     * }
+     * */
+    public BooleanReturn getWorkBankContent(Integer wbid) {
+        UserInfoDao userInfoDao = SpringBeanUtil.getBean(UserInfoDao.class);
+        BankWork bankWork = bankWorkDao.selectById(wbid);
+        if(bankWork == null){
+            return new BooleanReturn(false,"id=" + wbid + "的作业库不存在");
+        }else {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("BankName", bankWork.getWorkName());
+            jsonObject.put("author", userInfoDao.selectById(bankWork.getOwner()).getUsername());
+            jsonObject.put("isPrivate", bankWork.getIsPrivate());
+            jsonObject.put("tags", bankWork.getTags());
+            // 统计选择题个数
+            JSONArray workCotent = SubmitWork.getWorkCotentByWBID(wbid);
+            JSONObject jo;
+            int count_choice = 0;
+            int count_fillin = 0;
+            int count_text = 0;
+
+            if (workCotent != null) {
+                for (int i=0;i<workCotent.size();i++) {
+                    jo = (JSONObject) workCotent.get(i);
+                    if (jo.get("qtype").equals(Code.QueType_choice_question)){
+                        count_choice++;
+                    }else if(jo.get("qtype").equals(Code.QueType_fillin_question)){
+                        count_fillin++;
+                    } else if (jo.get("qtype").equals(Code.QueType_text_question)) {
+                        count_text++;
+                    }
+                }
+            }
+            jsonObject.put("numOfQue","[" + count_choice +"," + count_fillin + "," + count_text+"]");
+            int usedTimes = 0;
+            usedTimes = aWorkDao.selectCount(new LambdaQueryWrapper<AWork>().eq(AWork::getWorkId, wbid));
+            jsonObject.put("usedTimes", usedTimes);
+            return new BooleanReturn(true,jsonObject);
+        }
+    }
+
+    @Override
     public BooleanReturn getWorkBankByOnwer(Long tid) {
         Result res = new Result();
         JSONArray jarr = new JSONArray();
         LambdaQueryWrapper<BankOwner> lqw = new LambdaQueryWrapper<>();
         try{
             BankOwner bankOwner = bankOwnerDao.selectOne(lqw.eq(BankOwner::getOid, tid).eq(BankOwner::getBankType, 0));
+            if(bankOwner == null){
+                BooleanReturn.rt(false,"BankOwner不存在, tid=" + tid);
+            }
             String bids = bankOwner.getBids();
+
             ArrayList<String> arrayList = TypeChange.str2arrl(bids);
             if(arrayList.size() > 0){
                 for (String s : arrayList) {
@@ -114,6 +177,7 @@ public class WorkBankServiceImpl implements WorkBankService {
                 return new BooleanReturn(false, "列表为空");
             }
         }catch(Exception e){
+            e.printStackTrace();
             return new BooleanReturn(false, "Err: " + e.getMessage());
         }
     }

@@ -14,6 +14,7 @@ import java.util.List;
  */
 public interface WorkBankService {
     BooleanReturn createWorkBank(BankWork bankWork, Long tid);
+    BooleanReturn getWorkBankContent(Integer wbid);
     BooleanReturn deleteWorkBank(Integer work_id);
     BooleanReturn editWorksBank(BankWork bankWork);
     BankWork getWorkBankById(Integer work_id);

@@ -115,85 +115,96 @@ public class CourseCon {
             JSONObject ret = new JSONObject();
             // 获取最后一次考试ID
             List<AWork> objects = aWorkDao.selectList(new LambdaQueryWrapper<AWork>().eq(AWork::getCid, cid));
-            int max = -1;
-            for (AWork object : objects) {
-                if(object.getWorkId() > max && object.getIsExam() == 1){
-                    max = object.getWorkId();
-                }
-            }
-            int excellent = 0;
-            int good = 0;
-            int NTB = 0;
-            int fail = 0;
-            AWork aWork = aWorkDao.selectById(max);
-            if(aWork == null){
-                Float total_score = Float.valueOf(0);
+            if(objects == null){
+                ArrayList<Integer> arr = new ArrayList<>();
+                arr.add(0, 0);
+                arr.add(1, 0);
+                arr.add(2, 0);
+                arr.add(3, 0);
+                ret.put("examsCount", arr);
+                ret.put("worksCount", TypeChange.arr2str(new JSONArray()));
             }else{
-                Float total_score = aWorkDao.selectById(max).getTotalScore();
-                if(max != -1){
-                    List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
-                    for(SubmitWork sw: submitWorks){
-                        if(sw.getScore() >= 0.9*total_score){
-                            excellent++;
-                        }else if(sw.getScore() >= 0.75*total_score){
-                            good++;
-                        }else if(sw.getScore() >= 0.6*total_score){
-                            NTB++;
-                        }else {
-                            fail++;
+                int max = -1;
+                for (AWork object : objects) {
+                    if(object != null){
+                        if(object.getWorkId() > max && object.getIsExam() == 1){
+                            max = object.getWorkId();
                         }
                     }
                 }
-            }
-
-            // 获取考试成绩
-
-            ArrayList<Integer> arr = new ArrayList<>();
-
-            arr.add(0, excellent);
-            arr.add(1, good);
-            arr.add(2, NTB);
-            arr.add(3, fail);
-            ret.put("examsCount", arr);
-
-            // 获取历次作业统计
-            //  获取role
-            String role = JWT.getRole(token);
-            Long uid = JWT.getUid(token);
-            //  获取历次作业
-            JSONArray scores = new JSONArray();
-            if(role.equals("teacher")){
-                // 获取历次作业的平均成绩
-                for (AWork object : objects) {
-                    if(object.getIsExam() == 0){
-                        List<SubmitWork> submitWorks1 = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, object.getId()));
-                        float avarage_score = 0;
-                        for (SubmitWork submitWork : submitWorks1) {
-                            avarage_score += submitWork.getScore();
+                int excellent = 0;
+                int good = 0;
+                int NTB = 0;
+                int fail = 0;
+                AWork aWork = aWorkDao.selectById(max);
+                if(aWork == null){
+                    Float total_score = Float.valueOf(0);
+                }else{
+                    Float total_score = aWorkDao.selectById(max).getTotalScore();
+                    if(max != -1){
+                        List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, max));
+                        for(SubmitWork sw: submitWorks){
+                            if(sw.getScore() >= 0.9*total_score){
+                                excellent++;
+                            }else if(sw.getScore() >= 0.75*total_score){
+                                good++;
+                            }else if(sw.getScore() >= 0.6*total_score){
+                                NTB++;
+                            }else {
+                                fail++;
+                            }
                         }
-                        avarage_score /= (submitWorks1.size() == 0?1:submitWorks1.size());
-                        JSONObject jo = new JSONObject();
-                        jo.put("WorkName", object.getWorkName());
-                        jo.put("score", avarage_score);
-                        scores.add(jo);
                     }
                 }
-            }else if(role.equals("student")){
-                // 获取历次作业的成绩
-                for (AWork object : objects) {
-                    if(object.getIsExam() == 0){
-                        SubmitWork submitWorks1 = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, uid).eq(SubmitWork::getWorkTableId, object.getId()));
-                        JSONObject jo = new JSONObject();
-                        jo.put("WorkName", object.getWorkName());
-                        jo.put("score", submitWorks1 == null?"0":submitWorks1.getScore());
-                        scores.add(jo);
+
+                // 获取考试成绩
+
+                ArrayList<Integer> arr = new ArrayList<>();
+
+                arr.add(0, excellent);
+                arr.add(1, good);
+                arr.add(2, NTB);
+                arr.add(3, fail);
+                ret.put("examsCount", arr);
+                // 获取历次作业统计
+                //  获取role
+                String role = JWT.getRole(token);
+                Long uid = JWT.getUid(token);
+                //  获取历次作业
+                JSONArray scores = new JSONArray();
+                if(role.equals("teacher")){
+                    // 获取历次作业的平均成绩
+                    for (AWork object : objects) {
+                        if(object.getIsExam() == 0){
+                            List<SubmitWork> submitWorks1 = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, object.getId()));
+                            float avarage_score = 0;
+                            for (SubmitWork submitWork : submitWorks1) {
+                                avarage_score += submitWork.getScore();
+                            }
+                            avarage_score /= (submitWorks1.size() == 0?1:submitWorks1.size());
+                            JSONObject jo = new JSONObject();
+                            jo.put("WorkName", object.getWorkName());
+                            jo.put("score", avarage_score);
+                            scores.add(jo);
+                        }
                     }
+                }else if(role.equals("student")){
+                    // 获取历次作业的成绩
+                    for (AWork object : objects) {
+                        if(object.getIsExam() == 0){
+                            SubmitWork submitWorks1 = submitWorkDao.selectOne(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getUid, uid).eq(SubmitWork::getWorkTableId, object.getId()));
+                            JSONObject jo = new JSONObject();
+                            jo.put("WorkName", object.getWorkName());
+                            jo.put("score", submitWorks1 == null?"0":submitWorks1.getScore());
+                            scores.add(jo);
+                        }
+                    }
+                }else {
+                    System.out.println("Role Err: " + role);
                 }
-            }else {
-                System.out.println("Role Err: " + role);
+                ret.put("worksCount", TypeChange.arr2str(scores));
             }
-            ret.put("worksCount", TypeChange.arr2str(scores));
-            return  new Result(Code.Suc, ret, "获取成功嘞！");
+            return new Result(Code.Suc, ret, "获取成功嘞！");
         }catch (Exception e){
             e.printStackTrace();
             return new Result(Code.ERR, e.getMessage(), "Err Cause by getCourseStatistic" + e.getMessage());

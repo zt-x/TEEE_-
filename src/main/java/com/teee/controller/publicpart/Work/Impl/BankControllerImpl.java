@@ -58,6 +58,17 @@ public class BankControllerImpl implements BankController {
         }
     }
 
+    @Override
+    @RequestMapping("/Bank/getWorkBankContentByID")
+    @ResponseBody
+    public Result getWorkBankContentByID(@RequestParam("wbid") Integer wbid) {
+        BooleanReturn workBankContent = workBankService.getWorkBankContent(wbid);
+        if(workBankContent.isSuccess()){
+            return new Result(Code.Suc, workBankContent.getData(),workBankContent.getMsg());
+        }else{
+            return new Result(Code.ERR, null,workBankContent.getMsg());
+        }
+    }
 
     @Override
     public Result editWorkBank(BankWork bankWork) {
@@ -70,7 +81,7 @@ public class BankControllerImpl implements BankController {
     }
 
     @Override
-    public Result addWorkBank(String token, BankQuestion bankQuestion) {
+    public Result addQueBank(String token, BankQuestion bankQuestion) {
         return null;
     }
 
@@ -104,7 +115,7 @@ public class BankControllerImpl implements BankController {
         Long tid = JWT.getUid(token);
         BooleanReturn ret = workBankService.createWorkBank(bankWork, tid);
         if(ret.isSuccess()){
-            return new Result(Code.Suc, null, ret.getMsg());
+            return new Result(Code.Suc, ret.getData(), ret.getMsg());
         }else{
             return new Result(Code.ERR, null, ret.getMsg());
         }
