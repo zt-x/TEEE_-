@@ -136,7 +136,7 @@ public class WorkBankServiceImpl implements WorkBankService {
                     }
                 }
             }
-            jsonObject.put("numOfQue","[" + count_choice +"," + count_fillin + "," + count_text+"]");
+            jsonObject.put("numOfQue","[\"" + count_choice +"\",\"" + count_fillin + "\",\"" + count_text+"\"]");
             int usedTimes = 0;
             usedTimes = aWorkDao.selectCount(new LambdaQueryWrapper<AWork>().eq(AWork::getWorkId, wbid));
             jsonObject.put("usedTimes", usedTimes);
