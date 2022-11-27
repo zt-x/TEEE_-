@@ -127,8 +127,8 @@ public class CourseCon {
                 int max = -1;
                 for (AWork object : objects) {
                     if(object != null){
-                        if(object.getWorkId() > max && object.getIsExam() == 1){
-                            max = object.getWorkId();
+                        if(object.getId() > max && object.getIsExam() == 1){
+                            max = object.getId();
                         }
                     }
                 }
