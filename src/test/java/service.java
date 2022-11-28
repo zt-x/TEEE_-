@@ -1,12 +1,8 @@
 import com.teee.TEEEApplication;
-import com.teee.config.Code;
-import com.teee.controller.publicpart.PowerController;
 import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.dao.CourseDao;
 import com.teee.domain.Course;
-import com.teee.domain.works.BankQuestion;
 import com.teee.service.HomeWork.Questions.QuestionBankService;
-import com.teee.service.publicpart.PowerService;
 import com.teee.utils.SpringBeanUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.tree.ExpandVetoException;
 import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest(classes = TEEEApplication.class)
 @RunWith(SpringRunner.class)

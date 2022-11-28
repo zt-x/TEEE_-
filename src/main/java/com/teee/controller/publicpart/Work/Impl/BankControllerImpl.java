@@ -61,8 +61,8 @@ public class BankControllerImpl implements BankController {
     @Override
     @RequestMapping("/Bank/getWorkBankContentByID")
     @ResponseBody
-    public Result getWorkBankContentByID(@RequestParam("wbid") Integer wbid) {
-        BooleanReturn workBankContent = workBankService.getWorkBankContent(wbid);
+    public Result getWorkBankContentByID(@RequestHeader("Authorization") String token, @RequestParam("wbid") Integer wbid) {
+        BooleanReturn workBankContent = workBankService.getWorkBankContent(JWT.getUid(token),wbid);
         if(workBankContent.isSuccess()){
             return new Result(Code.Suc, workBankContent.getData(),workBankContent.getMsg());
         }else{

@@ -1,7 +1,6 @@
 package com.teee.controller.Impl;
 
 import com.teee.config.Code;
-import com.teee.controller.publicpart.PowerController;
 import com.teee.domain.UserInfo;
 import com.teee.domain.returnClass.Result;
 import com.teee.service.publicpart.Impl.PowerServiceImpl;

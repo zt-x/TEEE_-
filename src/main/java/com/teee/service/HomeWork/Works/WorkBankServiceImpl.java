@@ -8,6 +8,7 @@ import com.teee.dao.AWorkDao;
 import com.teee.dao.BankOwnerDao;
 import com.teee.dao.BankWorkDao;
 import com.teee.dao.UserInfoDao;
+import com.teee.domain.UserInfo;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
@@ -106,17 +107,20 @@ public class WorkBankServiceImpl implements WorkBankService {
      *
      * }
      * */
-    public BooleanReturn getWorkBankContent(Integer wbid) {
+    public BooleanReturn getWorkBankContent(Long tid, Integer wbid) {
         UserInfoDao userInfoDao = SpringBeanUtil.getBean(UserInfoDao.class);
         BankWork bankWork = bankWorkDao.selectById(wbid);
         if(bankWork == null){
             return new BooleanReturn(false,"id=" + wbid + "的作业库不存在");
         }else {
             JSONObject jsonObject = new JSONObject();
+            UserInfo userInfo = userInfoDao.selectById(bankWork.getOwner());
+            Long author = userInfo.getUid();
             jsonObject.put("BankName", bankWork.getWorkName());
-            jsonObject.put("author", userInfoDao.selectById(bankWork.getOwner()).getUsername());
+            jsonObject.put("author", userInfo.getUsername());
             jsonObject.put("isPrivate", bankWork.getIsPrivate());
             jsonObject.put("tags", bankWork.getTags());
+            jsonObject.put("isMine", author.equals(tid) ?1:0);
             // 统计选择题个数
             JSONArray workCotent = SubmitWork.getWorkCotentByWBID(wbid);
             JSONObject jo;
@@ -152,7 +156,7 @@ public class WorkBankServiceImpl implements WorkBankService {
         try{
             BankOwner bankOwner = bankOwnerDao.selectOne(lqw.eq(BankOwner::getOid, tid).eq(BankOwner::getBankType, 0));
             if(bankOwner == null){
-                BooleanReturn.rt(false,"BankOwner不存在, tid=" + tid);
+                return BooleanReturn.rt(false,"BankOwner不存在, tid=" + tid);
             }
             String bids = bankOwner.getBids();
 

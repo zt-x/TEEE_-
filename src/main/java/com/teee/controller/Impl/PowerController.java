@@ -1,4 +1,4 @@
-package com.teee.controller.publicpart;
+package com.teee.controller.Impl;
 
 import com.teee.domain.returnClass.Result;
 
