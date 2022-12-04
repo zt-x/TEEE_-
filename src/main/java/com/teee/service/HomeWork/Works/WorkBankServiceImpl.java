@@ -100,7 +100,7 @@ public class WorkBankServiceImpl implements WorkBankService {
      * return{
      *     bankName:
      *     isPrivate:
-     *     author:
+     *     (作者)author:
      *     usedTiems:
      *     Tags:[]
      *     numOfQue:[0,0,0]
