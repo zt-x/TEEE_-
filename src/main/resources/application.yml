@@ -11,9 +11,12 @@ spring:
     url: jdbc:mysql://124.223.187.100:3306/teee_db
     username: TEEE
     password: teee123456
+#path:
+#  picPath: /usr/local/myPic
+#  filePath: /usr/local/myFile
 path:
-  picPath: /usr/local/myPic
-  filePath: /usr/local/myFile
+  picPath: D:/testpic/
+  filePath: D:/testfile/
 realMaxFileSizeMB: 50
 #mybatis-plus:
 #  configuration:

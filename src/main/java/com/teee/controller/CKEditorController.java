@@ -53,27 +53,28 @@ public class CKEditorController {
     @ResponseBody
     public UploadResult uploadImg(@RequestParam("upload") MultipartFile file, HttpServletRequest request){
         ArrayList<String> suffixWhiteList = new ArrayList<>();
-        suffixWhiteList.add("png");
-        suffixWhiteList.add("jpg");
-        suffixWhiteList.add("jpeg");
-        suffixWhiteList.add("gif");
-        suffixWhiteList.add("ico");
-        suffixWhiteList.add("cur");
-        suffixWhiteList.add("jfif");
-        suffixWhiteList.add("pjpeg");
-        suffixWhiteList.add("pjp");
-        suffixWhiteList.add("svg");
-        suffixWhiteList.add("tif");
-        suffixWhiteList.add("webp");
-        suffixWhiteList.add("tiff");
+        suffixWhiteList.add(".png");
+        suffixWhiteList.add(".jpg");
+        suffixWhiteList.add(".jpeg");
+        suffixWhiteList.add(".gif");
+        suffixWhiteList.add(".ico");
+        suffixWhiteList.add(".cur");
+        suffixWhiteList.add(".jfif");
+        suffixWhiteList.add(".pjpeg");
+        suffixWhiteList.add(".pjp");
+        suffixWhiteList.add(".svg");
+        suffixWhiteList.add(".tif");
+        suffixWhiteList.add(".webp");
+        suffixWhiteList.add(".tiff");
         System.out.println("进入upload");
         if(file == null){
             return new UploadResult(0, new UploadErr("未发现上传的文件"));
         }
         String originalFilename = file.getOriginalFilename();
         String appendName = originalFilename.substring(originalFilename.lastIndexOf("."));
+        System.out.println("append: " + appendName);
         if(!suffixWhiteList.contains(appendName)){
-            return new UploadResult(0, new UploadErr("仅支持拖拽上传图片，若上传附件，请通过添加附件按钮上传"));
+            return new UploadResult(0, new UploadErr("图片格式不支持"));
 
 //            return new UploadResult(0, new UploadErr("不支持的图像格式"));
         }
