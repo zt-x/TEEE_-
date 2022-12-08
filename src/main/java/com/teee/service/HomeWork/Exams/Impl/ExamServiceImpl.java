@@ -13,14 +13,22 @@ public class ExamServiceImpl implements ExamService {
         return null;
     }
 
+
+    /**
+     * submit:{
+     *     uid:
+     *     wid:
+     *     facePic:
+     * }
+     *
+     * **/
     @Override
     public BooleanReturn checkRule(JSONObject submit, ArrayList<String> rules) {
         boolean pass = true;
         String failMsg = "";
         for (String rule : rules) {
             if("FACKCHECK".equals(rule)){
-
-            }else if(){
+                // 本地拉取用户Face
 
             }
         }

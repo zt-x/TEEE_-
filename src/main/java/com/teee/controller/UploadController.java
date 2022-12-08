@@ -1,20 +1,18 @@
 package com.teee.controller;
 
-import ch.qos.logback.core.util.FileUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.teee.config.Code;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.returnClass.UploadErr;
 import com.teee.domain.returnClass.UploadResult;
+import com.teee.service.User.UserService;
+import com.teee.utils.JWT;
+import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,14 +26,13 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * @author Xu ZhengTao
  */
 @RequestMapping("/upload")
 @Controller
-public class CKEditorController {
+public class UploadController {
 
     @Value("${path.picPath}")
     private String picPath;
@@ -43,11 +40,28 @@ public class CKEditorController {
     @Value("${path.filePath}")
     private String filePath;
 
+    @Value("${path.facePath}")
+    private String facePath;
+
     @Value("${server.port}")
     private String port;
 
     @Value("${realMaxFileSizeMB}")
     private int maxSizeMB;
+
+    @RequestMapping("/uploadFacePic")
+    @ResponseBody
+    public Result uploadFacePic(@RequestHeader("Authorization") String token, @RequestParam("upload") MultipartFile file, HttpServletRequest request){
+        UploadResult uploadResult = uploadImg(file, request);
+        if(uploadResult.getUploaded() == 0){
+            return new Result(Code.ERR, uploadResult.getError());
+        }else{
+            SpringBeanUtil.getBean(UserService.class).setFace(JWT.getUid(token), uploadResult.getUrl());
+            return new Result(Code.Suc,null, "上传成功");
+        }
+    }
+
+
 
     @RequestMapping("/img")
     @ResponseBody
@@ -95,6 +109,11 @@ public class CKEditorController {
             return new UploadResult(0, new UploadErr("上传失败"));
         }
     }
+
+
+
+
+
     @RequestMapping("/file")
     @ResponseBody
     public Result uploadFile(@RequestParam("file") MultipartFile[] file, HttpServletRequest request){

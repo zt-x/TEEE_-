@@ -14,9 +14,15 @@ spring:
 #path:
 #  picPath: /usr/local/myPic
 #  filePath: /usr/local/myFile
+logging:
+  level:
+    root: info
+  file:
+    name: D:/TEEELog/log.log
 path:
   picPath: D:/testpic/
   filePath: D:/testfile/
+  facePath: D:/testFace/
 realMaxFileSizeMB: 50
 Tencent:
   secretId: AKIDjU6ZMxWiookaLzXjrsjPtAIG3hEbopWE
