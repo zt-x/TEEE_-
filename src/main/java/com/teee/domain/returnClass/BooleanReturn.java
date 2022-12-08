@@ -17,6 +17,12 @@ public class BooleanReturn {
         this.data = data;
     }
 
+    public BooleanReturn(boolean success, String msg, Object data) {
+        this.success = success;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public BooleanReturn(boolean bool) {
         this.success = bool;
     }

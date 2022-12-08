@@ -11,5 +11,5 @@ public class Announcement {
     String type;
     String title;
     String releaseTime;
-//    String
+    String content;
 }

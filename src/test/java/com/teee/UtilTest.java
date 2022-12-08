@@ -1,15 +1,27 @@
 package com.teee;
 
 import com.teee.domain.SpecialArray;
+import com.teee.utils.SpringBeanUtil;
+import com.teee.utils.Tencent;
 import com.teee.utils.TypeChange;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.util.ArrayList;
 
-//@SpringBootTest(classes = TEEEApplication.class)
-//@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TEEEApplication.class)
+@RunWith(SpringRunner.class)
 public class UtilTest {
+
+    @Test
+    public void tencentTest2(){
+        SpringBeanUtil.getBean(Tencent.class).faceCheck("","");
+    }
+
+
     @Test
     public void arr2str(){
         ArrayList<String> arr = new ArrayList<>();

@@ -18,6 +18,9 @@ path:
   picPath: D:/testpic/
   filePath: D:/testfile/
 realMaxFileSizeMB: 50
+Tencent:
+  secretId: AKIDjU6ZMxWiookaLzXjrsjPtAIG3hEbopWE
+  secretKey: gHi5LQwKWbTAh3DD2YtAFAvY5RcdVBi3
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
