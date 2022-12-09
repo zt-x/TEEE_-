@@ -3,13 +3,15 @@ package com.teee.service.HomeWork;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.controller.publicpart.Work.Impl.AutoReadOver;
-import com.teee.dao.*;
+import com.teee.dao.AWorkDao;
+import com.teee.dao.SubmitWorkContentDao;
+import com.teee.dao.SubmitWorkDao;
+import com.teee.dao.UserInfoDao;
 import com.teee.domain.UserInfo;
 import com.teee.domain.works.SubmitWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

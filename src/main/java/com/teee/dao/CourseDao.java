@@ -2,7 +2,6 @@ package com.teee.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.teee.domain.Course;
-import com.teee.domain.TeacherCourse;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

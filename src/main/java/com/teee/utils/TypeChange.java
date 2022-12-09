@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,16 +17,22 @@ public class TypeChange {
     /**
      * 将图片转换成Base64编码
      * @param imgFile 待处理图片地址
+     * @param type 0为URL, 1为文件路径
      * @return
      */
-    public static String getImgBase(String imgFile) {
-
+    public static String getImgBase(String imgFile, int type) {
         // 将图片文件转化为二进制流
         InputStream in = null;
         byte[] data = null;
         // 读取图片字节数组
         try {
-            in = new FileInputStream(imgFile);
+            if(type==0){
+                System.out.println("URL = " + imgFile);
+                in = new URL(imgFile).openStream();
+            }else if(type==1){
+                System.out.println("FilePath = " + imgFile);
+                in = new FileInputStream(imgFile);
+            }
             data = new byte[in.available()];
             in.read(data);
             in.close();
@@ -35,6 +43,26 @@ public class TypeChange {
         //String imghead = "data:image/jpeg;base64,";
         return Base64.encodeBase64String(data);
     }
+
+
+    public static BigDecimal Obj2BigDec(Object value) {
+        BigDecimal ret = null;
+        if (value != null) {
+            if (value instanceof BigDecimal) {
+                ret = (BigDecimal) value;
+            } else if (value instanceof String) {
+                ret = new BigDecimal((String) value);
+            } else if (value instanceof BigInteger) {
+                ret = new BigDecimal((BigInteger) value);
+            } else if (value instanceof Number) {
+                ret = new BigDecimal(((Number) value).doubleValue());
+            } else {
+                throw new ClassCastException("Not possible to coerce [" + value + "] from class " + value.getClass() + " into a BigDecimal.");
+            }
+        }
+        return ret;
+    }
+
 
     public static ArrayList<String> str2arrl(String str, String sep){
         if ("".equals(str) || "[]".equals(str) || str == null){

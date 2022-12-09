@@ -1,13 +1,10 @@
 package com.teee.service.HomeWork.Works;
 
-import com.alibaba.fastjson.JSONArray;
 import com.teee.domain.returnClass.BooleanReturn;
-import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Xu ZhengTao

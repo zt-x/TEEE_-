@@ -1,10 +1,12 @@
 package com.teee.service.HomeWork.Exams;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.WorkExamRule;
 
 import java.util.ArrayList;
+
+
 
 public interface ExamService {
 
@@ -15,8 +17,6 @@ public interface ExamService {
      *     uid:
      *     wid:
      *     subFace:
-     *
-     *     +
      * }
      **/
     BooleanReturn checkRule(JSONObject submit, ArrayList<String> rules);

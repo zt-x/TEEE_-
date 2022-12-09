@@ -31,6 +31,8 @@ public class Tencent {
         // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
         // 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
         try {
+            System.out.println("sid = " + secretId);
+            System.out.println("skey = " + secretKey);
             Credential cred = new Credential(secretId, secretKey);
             // 实例化一个http选项，可选的，没有特殊需求可以跳过
             HttpProfile httpProfile = new HttpProfile();
@@ -42,10 +44,9 @@ public class Tencent {
             IaiClient client = new IaiClient(cred, "ap-chengdu", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             CompareFaceRequest req = new CompareFaceRequest();
-            String b1 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xzt1.png");
-            String b2 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\face3.jpg");
-            req.setImageA(b1);
-            req.setImageB(b2);
+
+            req.setImageA(fileUrl1);
+            req.setImageB(fileUrl2);
             // 返回的resp是一个CompareFaceResponse的实例，与请求对象对应
             CompareFaceResponse resp = null;
             resp = client.CompareFace(req);

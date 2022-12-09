@@ -12,8 +12,6 @@ import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import lombok.Data;
 
-import java.util.ArrayList;
-
 @Data
 @TableName("submit_work")
 public class SubmitWork {

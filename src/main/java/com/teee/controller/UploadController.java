@@ -51,8 +51,8 @@ public class UploadController {
 
     @RequestMapping("/uploadFacePic")
     @ResponseBody
-    public Result uploadFacePic(@RequestHeader("Authorization") String token, @RequestParam("upload") MultipartFile file, HttpServletRequest request){
-        UploadResult uploadResult = uploadImg(file, request);
+    public Result uploadFacePic(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+        UploadResult uploadResult = uploadImg(file, request, facePath, "face");
         if(uploadResult.getUploaded() == 0){
             return new Result(Code.ERR, uploadResult.getError());
         }else{
@@ -65,7 +65,12 @@ public class UploadController {
 
     @RequestMapping("/img")
     @ResponseBody
-    public UploadResult uploadImg(@RequestParam("upload") MultipartFile file, HttpServletRequest request){
+    public UploadResult uploadPicImg(@RequestParam("upload") MultipartFile file, HttpServletRequest request){
+        UploadResult uploadResult = uploadImg(file, request, picPath, "pic");
+        return uploadResult;
+    }
+
+    private UploadResult uploadImg(MultipartFile file, HttpServletRequest request, String path, String dirName){
         ArrayList<String> suffixWhiteList = new ArrayList<>();
         suffixWhiteList.add(".png");
         suffixWhiteList.add(".jpg");
@@ -94,14 +99,14 @@ public class UploadController {
         }
         System.out.println("origin: " + originalFilename);
         System.out.println("appendName: " + appendName);
-        File newMkdir = new File(picPath);
+        File newMkdir = new File(path);
         if(!newMkdir.exists()){
             newMkdir.mkdirs();
         }
         String uploadFile = System.currentTimeMillis() + appendName;
         try {
-            file.transferTo(new File(picPath+File.separator+uploadFile));
-            String url = request.getScheme() + "://" + request.getServerName() + ":" + port + "/pic/" + uploadFile;
+            file.transferTo(new File(path+File.separator+uploadFile));
+            String url = request.getScheme() + "://" + request.getServerName() + ":" + port + "/" + dirName + "/" + uploadFile;
             System.out.println("url=" + url);
             return new UploadResult(1, "",url);
         } catch (IOException e) {
@@ -121,10 +126,10 @@ public class UploadController {
             System.out.println("进入上传队列 ...");
             // 文件校验
             for (MultipartFile multipartFile : file) {
-                int check =checkFile(multipartFile);
+                int check = checkFile(multipartFile);
                 if(check!=0){
                     if(check==1){
-                        return new Result(Code.ERR,null ,"文件:" +multipartFile.getOriginalFilename()+"超出大小限制(" + maxSizeMB + "MB)");
+                        return new Result(Code.ERR,null ,"文件:" + multipartFile.getOriginalFilename() + "超出大小限制(" + maxSizeMB + "MB)");
                     }
                 }
             }

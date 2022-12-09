@@ -4,7 +4,6 @@ import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.BankQuestion;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**

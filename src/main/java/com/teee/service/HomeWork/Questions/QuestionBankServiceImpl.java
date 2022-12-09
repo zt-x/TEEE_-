@@ -9,13 +9,11 @@ import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankQuestion;
-import com.teee.domain.works.BankWork;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Xu ZhengTao

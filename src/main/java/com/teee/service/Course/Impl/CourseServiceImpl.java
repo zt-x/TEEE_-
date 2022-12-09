@@ -1,6 +1,5 @@
 package com.teee.service.Course.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teee.config.Code;
@@ -10,17 +9,12 @@ import com.teee.dao.UserCourseDao;
 import com.teee.dao.UserInfoDao;
 import com.teee.domain.Course;
 import com.teee.domain.CourseUser;
-import com.teee.domain.TeacherCourse;
 import com.teee.domain.UserCourse;
 import com.teee.service.Course.CourseService;
-import com.teee.utils.SpringBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.UID;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {

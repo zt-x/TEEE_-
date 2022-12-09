@@ -3,7 +3,6 @@ package com.teee.controller.publicpart.Work;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.BankQuestion;
 import com.teee.domain.works.BankWork;
-import com.teee.service.HomeWork.Questions.QuestionBankService;
 
 public interface BankController {
     //作业库

@@ -15,14 +15,12 @@ import com.teee.domain.works.AWork;
 import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankWork;
 import com.teee.domain.works.SubmitWork;
-import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Xu ZhengTao

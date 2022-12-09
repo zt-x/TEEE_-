@@ -1,28 +1,17 @@
 package com.teee.controller.publicpart.Work.Impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.BankController;
-import com.teee.dao.BankOwnerDao;
-import com.teee.dao.BankQuestionDao;
-import com.teee.dao.BankWorkDao;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
-import com.teee.domain.works.BankOwner;
 import com.teee.domain.works.BankQuestion;
 import com.teee.domain.works.BankWork;
 import com.teee.service.HomeWork.Questions.QuestionBankService;
 import com.teee.service.HomeWork.Works.WorkBankService;
 import com.teee.utils.JWT;
-import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Controller

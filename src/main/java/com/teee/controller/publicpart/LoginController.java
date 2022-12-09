@@ -2,13 +2,16 @@ package com.teee.controller.publicpart;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
-import com.teee.domain.returnClass.Result;
 import com.teee.dao.LoginDao;
 import com.teee.domain.LoginData;
+import com.teee.domain.returnClass.Result;
 import com.teee.utils.JWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
 

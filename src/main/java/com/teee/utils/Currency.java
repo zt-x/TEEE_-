@@ -1,9 +1,6 @@
 package com.teee.utils;
 
-import com.alibaba.fastjson.JSONArray;
 import com.teee.domain.LoginData;
-
-import java.util.ArrayList;
 
 public class Currency {
     //解析uid和role

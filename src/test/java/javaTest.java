@@ -37,21 +37,8 @@ public class javaTest {
 
     @Test
     public void base() {
-        String imgBase = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xzt1.png");
-        System.out.println(imgBase);
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println("============================");
-        imgBase = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xzt2.jpg");
-        System.out.println(imgBase);
-
+//        String imgBase = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xz.png");
+//        System.out.println(imgBase);
     }
 
     @Test
@@ -70,10 +57,10 @@ public class javaTest {
             IaiClient client = new IaiClient(cred, "ap-chengdu", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             CompareFaceRequest req = new CompareFaceRequest();
-            String b1 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xzt1.png");
-            String b2 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\face3.jpg");
-            req.setImageA(b1);
-            req.setImageB(b2);
+//            String b1 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xzt1.png");
+//            String b2 = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\face3.jpg");
+//            req.setImageA(b1);
+//            req.setImageB(b2);
             // 返回的resp是一个CompareFaceResponse的实例，与请求对象对应
             CompareFaceResponse resp = client.CompareFace(req);
             // 输出json格式的字符串回包
