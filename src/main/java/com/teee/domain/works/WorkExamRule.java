@@ -21,6 +21,16 @@ public class WorkExamRule {
 
     String ruleEnter;
 
+    String ruleText;
+
     @TableLogic//逻辑删除
     private Integer deleted;
+
+    public WorkExamRule(Integer wid, String rulePre, String ruleEnter, String ruleText) {
+        this.wid = wid;
+        this.rulePre = rulePre;
+        this.ruleEnter = ruleEnter;
+        this.ruleText = ruleText;
+        this.deleted = 0;
+    }
 }

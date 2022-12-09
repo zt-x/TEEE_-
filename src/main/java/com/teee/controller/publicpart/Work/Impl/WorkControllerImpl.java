@@ -7,11 +7,10 @@ import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.WorkController;
 import com.teee.dao.*;
 import com.teee.domain.Course;
+import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
-import com.teee.domain.works.AWork;
-import com.teee.domain.works.BankWork;
-import com.teee.domain.works.SubmitWork;
-import com.teee.domain.works.WorkTimer;
+import com.teee.domain.works.*;
+import com.teee.service.HomeWork.Exams.ExamService;
 import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
@@ -30,6 +29,11 @@ public class WorkControllerImpl implements WorkController {
     BankWorkDao bankWorkDao;
     @Autowired
     CourseDao courseDao;
+    @Autowired
+    WorkTimerDao workTimerDao;
+    @Autowired
+    ExamService examService;
+
 
     @Override
     @ResponseBody
@@ -151,8 +155,6 @@ public class WorkControllerImpl implements WorkController {
         return new Result(Code.Suc, TypeChange.arr2str(jarr2), "获取作业完成状态成功!");
     }
 
-    @Autowired
-    WorkTimerDao workTimerDao;
 
     @Override
     @RequestMapping("/Work/getWorkTimer")
@@ -189,5 +191,50 @@ public class WorkControllerImpl implements WorkController {
 
         }
 
+    }
+
+    @Override
+    @RequestMapping("/Exam/getExamRulePre")
+    @ResponseBody
+    public Result getExamRulePre(Integer wid) {
+        try {
+            JSONObject jo = new JSONObject();
+            BooleanReturn ruleForExam = examService.getRuleForExam(wid);
+            WorkExamRule workExamRule = (WorkExamRule) ruleForExam.getData();
+            jo.put("rules",workExamRule.getRulePre());
+            jo.put("text",workExamRule.getRuleText());
+            return new Result(Code.Suc,jo,"获取成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, null, e.getMessage());
+        }
+    }
+
+    @Override
+    @RequestMapping("/Exam/getExamRuleEnter")
+    @ResponseBody
+    public Result getExamRuleEnter(Integer wid) {
+        try {
+            JSONObject jo = new JSONObject();
+            BooleanReturn ruleForExam = examService.getRuleForExam(wid);
+            WorkExamRule workExamRule = (WorkExamRule) ruleForExam.getData();
+            jo.put("rules",workExamRule.getRuleEnter());
+            return new Result(Code.Suc,jo,"获取成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(Code.ERR, null, e.getMessage());
+        }
+    }
+
+    @Override
+    @RequestMapping("/Exam/setRules")
+    @ResponseBody
+    public Result setRules(@RequestBody WorkExamRule workExamRule) {
+        try{
+            examService.setRuleForExam(workExamRule);
+            return new Result(Code.Suc, null, "规则添加成功");
+        }catch (Exception e){
+        return new Result(Code.ERR, e.getMessage(), "规则添加失败");
+        }
     }
 }

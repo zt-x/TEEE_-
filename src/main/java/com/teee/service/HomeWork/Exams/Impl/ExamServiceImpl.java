@@ -1,7 +1,9 @@
 package com.teee.service.HomeWork.Exams.Impl;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.dao.UserFaceDao;
+import com.teee.dao.WorkExamRuleDao;
 import com.teee.domain.UserFace;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.works.WorkExamRule;
@@ -23,14 +25,44 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     Tencent tencent;
 
+    @Autowired
+    WorkExamRuleDao workExamRuleDao;
+
     @Value("${path.facePath}")
     private String facePath;
 
     @Override
-    public BooleanReturn setRuleForExam(int wid, WorkExamRule rule) {
-        return null;
+    public BooleanReturn setRuleForExam(WorkExamRule rule) {
+        LambdaQueryWrapper lqw = new LambdaQueryWrapper<WorkExamRule>().eq(WorkExamRule::getWid, rule.getWid());
+        try{
+            if(workExamRuleDao.selectCount(lqw) > 0){
+                workExamRuleDao.updateById(rule);
+            }else{
+                workExamRuleDao.insert(rule);
+            }
+            return new BooleanReturn(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new BooleanReturn(false, e.getMessage());
+        }
+
     }
 
+    @Override
+    public BooleanReturn getRuleForExam(int wid) {
+        try{
+            WorkExamRule workExamRule = workExamRuleDao.selectById(wid);
+            if(workExamRule != null){
+                return new BooleanReturn(true,"",workExamRule);
+            }else{
+                return new BooleanReturn(true, "",new WorkExamRule(wid,"","","无规则"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new BooleanReturn(false,e.getMessage());
+
+        }
+    }
 
     /**
      * submit:{

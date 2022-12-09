@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public interface ExamService {
 
-    BooleanReturn setRuleForExam(int wid, WorkExamRule rule);
-
+    BooleanReturn setRuleForExam(WorkExamRule rule);
+    BooleanReturn getRuleForExam(int wid);
     /**
      * Submit:{
      *     uid:
