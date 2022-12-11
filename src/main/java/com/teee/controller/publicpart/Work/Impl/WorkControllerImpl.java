@@ -70,10 +70,10 @@ public class WorkControllerImpl implements WorkController {
                 aWork.setDeadline("9999-12-30");
             }
             aWorkDao.insert(aWork);
+            return new Result(Code.Suc, aWork.getId(), "发布成功!");
         }catch(Exception e){
             return new Result(Code.ERR, e.getMessage(), "Unknow Err Cause by ReleaseAWork()");
         }
-        return new Result(Code.Suc, null, "发布成功!");
     }
 
     @ResponseBody
@@ -196,7 +196,7 @@ public class WorkControllerImpl implements WorkController {
     @Override
     @RequestMapping("/Exam/getExamRulePre")
     @ResponseBody
-    public Result getExamRulePre(Integer wid) {
+    public Result getExamRulePre(@RequestParam("wid") Integer wid) {
         try {
             JSONObject jo = new JSONObject();
             BooleanReturn ruleForExam = examService.getRuleForExam(wid);

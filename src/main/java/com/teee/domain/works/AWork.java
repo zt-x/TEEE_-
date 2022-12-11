@@ -22,6 +22,9 @@ public class AWork {
     @TableField("Status")
     Integer Status;
 
+    @TableField(exist = false)
+    WorkExamRule rule;
+
     @TableLogic//逻辑删除
     private Integer deleted;
 }
