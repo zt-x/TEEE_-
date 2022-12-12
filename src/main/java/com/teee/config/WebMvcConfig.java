@@ -16,9 +16,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${path.facePath}")
     private String facePath;
+
+    @Value("${path.tempPath}")
+    private String tempPath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/pic/**").addResourceLocations("file:" + picPath);
         registry.addResourceHandler("/face/**").addResourceLocations("file:" + facePath);
+        registry.addResourceHandler("/tmp/**").addResourceLocations("file:" + tempPath);
     }
 }

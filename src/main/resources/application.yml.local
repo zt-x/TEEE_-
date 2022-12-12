@@ -11,20 +11,20 @@ spring:
     url: jdbc:mysql://124.223.187.100:3306/teee_db
     username: TEEE
     password: teee123456
-path:
-  picPath: /usr/local/myPic
-  filePath: /usr/local/myFile
-  facePath: /usr/local/myFace
-  tempPath: /usr/local/myTemp
+#path:
+#  picPath: /usr/local/myPic
+#  filePath: /usr/local/myFile
+#  facePath: /usr/local/myFace
 logging:
   level:
     root: info
   file:
-    name: /usr/local/TEEELog/log.log
-#path:
-#  picPath: D:/testpic/
-#  filePath: D:/testfile/
-#  facePath: D:/testFace/
+    name: D:/TEEELog/log.log
+path:
+  picPath: D:/testpic/
+  filePath: D:/testfile/
+  facePath: D:/testFace/
+  tempPath: D:/testTemp/
 realMaxFileSizeMB: 50
 Tencent:
   secretId: AKIDjU6ZMxWiookaLzXjrsjPtAIG3hEbopWE

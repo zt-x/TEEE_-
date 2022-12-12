@@ -20,5 +20,6 @@ public interface ExamService {
      * }
      **/
     BooleanReturn checkRule(JSONObject submit, ArrayList<String> rules);
+    BooleanReturn faceCheck(Long uid, String imgUrl);
 
 }

@@ -12,6 +12,8 @@ import com.tencentcloudapi.iai.v20200303.models.CompareFaceResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 /**
  * @author Xu ZhengTao
  */
@@ -44,15 +46,16 @@ public class Tencent {
             IaiClient client = new IaiClient(cred, "ap-chengdu", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             CompareFaceRequest req = new CompareFaceRequest();
-
-            req.setImageA(fileUrl1);
-            req.setImageB(fileUrl2);
+            System.out.println("URL1: " + fileUrl1);
+            System.out.println("URL2: " + fileUrl2);
+            req.setImageA(TypeChange.getImageBaseURL(fileUrl1));
+            req.setImageB(TypeChange.getImageBaseURL(fileUrl2));
             // 返回的resp是一个CompareFaceResponse的实例，与请求对象对应
             CompareFaceResponse resp = null;
             resp = client.CompareFace(req);
 
             return new BooleanReturn(true,"",JSON.parse(CompareFaceResponse.toJsonString(resp)));
-        } catch (TencentCloudSDKException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new BooleanReturn(false, e.getMessage(), null);
         }

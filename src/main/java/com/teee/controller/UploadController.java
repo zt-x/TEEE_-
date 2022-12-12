@@ -2,13 +2,17 @@ package com.teee.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.teee.config.Code;
+import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.returnClass.UploadErr;
 import com.teee.domain.returnClass.UploadResult;
+import com.teee.service.HomeWork.Exams.ExamService;
 import com.teee.service.User.UserService;
 import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
+import com.teee.utils.Tencent;
 import com.teee.utils.TypeChange;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -33,7 +37,10 @@ import java.util.ArrayList;
 @RequestMapping("/upload")
 @Controller
 public class UploadController {
-
+    
+    @Autowired
+    Tencent tencent;
+    
     @Value("${path.picPath}")
     private String picPath;
 
@@ -42,6 +49,9 @@ public class UploadController {
 
     @Value("${path.facePath}")
     private String facePath;
+
+    @Value("${path.tempPath}")
+    private String tempPath;
 
     @Value("${server.port}")
     private String port;
@@ -61,6 +71,22 @@ public class UploadController {
         }
     }
 
+    @RequestMapping("/checkFace")
+    @ResponseBody
+    public Result checkFace(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+        UploadResult uploadResult = uploadImg(file, request, tempPath, "tmp");
+        if(uploadResult.getUploaded() == 0){
+            return new Result(Code.ERR, uploadResult.getError());
+        }else{
+            BooleanReturn faceCheck = SpringBeanUtil.getBean(ExamService.class).faceCheck(JWT.getUid(token), uploadResult.getUrl());
+            if(faceCheck.isSuccess()){
+                return new Result(Code.Suc,null,"验证通过");
+            }else{
+                return new Result(Code.ERR,faceCheck.getData(), "验证不通过: " + faceCheck.getMsg());
+
+            }
+        }
+    }
 
 
     @RequestMapping("/img")

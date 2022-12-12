@@ -64,6 +64,40 @@ public class ExamServiceImpl implements ExamService {
         }
     }
 
+    @Override
+    public BooleanReturn faceCheck(Long uid, String imgUrl) {
+        // 本地拉取用户Face
+        UserFace u_face = userFaceDao.selectById(uid);
+        if(u_face == null || u_face.getFaceSrc() == null){
+            return new BooleanReturn(false,"您还没有登记人脸信息捏~请先 “头像->个人信息->添加人脸验证” 喵");
+        }
+        System.out.println("正在获取本地FACE");
+        String faceSrc = u_face.getFaceSrc();
+
+
+        // 获取当前照片
+        System.out.println("正在获取当前上传的FACE");
+
+        if(faceSrc == null || imgUrl == null){
+            return new BooleanReturn(false,"存在空照片");
+        }
+        BooleanReturn faceCheckRes = tencent.faceCheck(faceSrc, imgUrl);
+        if(faceCheckRes.isSuccess()){
+            JSONObject data = (JSONObject) faceCheckRes.getData();
+            BigDecimal score = TypeChange.Obj2BigDec(data.get("Score"));
+            System.out.println("SCORE = " + score);
+            if(score.compareTo(new BigDecimal(80)) >=0){
+                return new BooleanReturn(true, "验证通过");
+
+            }else{
+                return new BooleanReturn(false, "验证不通过");
+
+            }
+        }else{
+            return new BooleanReturn(false,faceCheckRes.getMsg());
+        }
+    }
+
     /**
      * submit:{
      *     uid:
@@ -72,6 +106,7 @@ public class ExamServiceImpl implements ExamService {
      * }
      *
      * **/
+
     @Override
     public BooleanReturn checkRule(JSONObject submit, ArrayList<String> rules) {
         boolean pass = true;
@@ -85,16 +120,17 @@ public class ExamServiceImpl implements ExamService {
                     return new BooleanReturn(false,"您还没有登记人脸信息捏~");
                 }
                 System.out.println("正在获取本地FACE");
-                String faceSrc = TypeChange.getImgBase(u_face.getFaceSrc(),0);
-
+                String faceSrc = null;
+                try {
+                    faceSrc = TypeChange.getImageBaseURL(u_face.getFaceSrc());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 // 获取当前照片
                 System.out.println("正在获取当前上传的FACE");
-
-
-                //TODO 测试
-                String submitFace = TypeChange.getImgBase(submit.getString("subFace"),1);
-
+                // TODO 测试
+                String submitFace = TypeChange.getImgBaseFile(submit.getString("subFace"));
                 if(faceSrc == null || submitFace == null){
                     return new BooleanReturn(false,"存在空照片");
                 }
@@ -107,7 +143,7 @@ public class ExamServiceImpl implements ExamService {
                         return new BooleanReturn(true, "验证通过");
 
                     }else{
-                        return new BooleanReturn(false, "验证不通过");
+                        return new BooleanReturn(false, "相似度较低");
 
                     }
                 }else{

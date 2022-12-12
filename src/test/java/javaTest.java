@@ -10,7 +10,6 @@ import com.tencentcloudapi.iai.v20200303.models.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class javaTest {
     @Test
@@ -36,9 +35,20 @@ public class javaTest {
     }
 
     @Test
+    public void str(){
+        String s = "http://127.0.0.1:8080/face/1670823306430.png";
+        System.out.println(s.substring(s.lastIndexOf("/")));
+    }
+
+    @Test
     public void base() {
-//        String imgBase = TypeChange.getImgBase("C:\\Users\\Xuuu\\Pictures\\face\\xz.png");
-//        System.out.println(imgBase);
+        String imgBase = null;
+        try {
+            imgBase = TypeChange.getImageBaseURL("http://127.0.0.1:8080/face/1670556470201.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(imgBase);
     }
 
     @Test
