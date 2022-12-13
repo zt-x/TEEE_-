@@ -173,7 +173,6 @@ public class CourseServiceImpl implements CourseService {
     public File packageFile(int wid) {
         String tmpFilePath = tempPath+File.separator + "downloadZipTemp" + File.separator + wid;
         File tmpdir = new File(tmpFilePath);
-        System.out.println("exi: " + tmpdir.exists() + "isD:" + tmpdir.isDirectory() + "isFile: " + tmpdir.isFile());
         if(tmpdir.isDirectory()){
             System.out.println("wid文件夹存在, 删除");
             fileUtil.delFile(tmpdir);
