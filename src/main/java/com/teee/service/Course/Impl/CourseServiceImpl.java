@@ -2,19 +2,26 @@ package com.teee.service.Course.Impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.teee.config.Code;
-import com.teee.dao.CourseDao;
-import com.teee.dao.CourseUserDao;
-import com.teee.dao.UserCourseDao;
-import com.teee.dao.UserInfoDao;
+import com.teee.dao.*;
 import com.teee.domain.Course;
 import com.teee.domain.CourseUser;
 import com.teee.domain.UserCourse;
+import com.teee.domain.works.SubmitWork;
+import com.teee.domain.works.SubmitWorkContent;
 import com.teee.service.Course.CourseService;
+import com.teee.utils.TypeChange;
+import com.teee.utils.fileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -22,12 +29,22 @@ public class CourseServiceImpl implements CourseService {
     private CourseUserDao courseUserDao;
     @Autowired
     private UserCourseDao userCourseDao;
-
     @Autowired
     private CourseDao courseDao;
-
     @Autowired
     private UserInfoDao userInfoDao;
+    @Autowired
+    private SubmitWorkDao submitWorkDao;
+    @Autowired
+    private SubmitWorkContentDao submitWorkContentDaoDao;
+
+    @Value("${path.filePath}")
+    private String filePath;
+
+    @Value("${path.tempPath}")
+    private String tempPath;
+
+
     @Override
     public boolean isCourseExist(int cid){
         try{
@@ -152,6 +169,52 @@ public class CourseServiceImpl implements CourseService {
         return courses;
     }
 
+    @Override
+    public File packageFile(int wid) {
+        String tmpFilePath = tempPath+File.separator + "downloadZipTemp" + File.separator + wid;
+        File tmpdir = new File(tmpFilePath);
+        System.out.println("exi: " + tmpdir.exists() + "isD:" + tmpdir.isDirectory() + "isFile: " + tmpdir.isFile());
+        if(tmpdir.isDirectory()){
+            System.out.println("wid文件夹存在, 删除");
+            fileUtil.delFile(tmpdir);
+        }else{
 
-
+        }
+        List<SubmitWork> submitWorks = submitWorkDao.selectList(new LambdaQueryWrapper<SubmitWork>().eq(SubmitWork::getWorkTableId, wid));
+        for (SubmitWork sw : submitWorks) {
+            System.out.println("获取work");
+            Integer submitId = sw.getSubmitId();
+            SubmitWorkContent swc = submitWorkContentDaoDao.selectById(submitId);
+            String files = swc.getFiles();
+            ArrayList<String> file_list = TypeChange.str2arrl(files);
+            for (int i = 1; i <= file_list.size(); i++) {
+                // 第 i 题
+                System.out.println("  获取第" + i + "题");
+                ArrayList<String> ans_file = TypeChange.str2arrl(file_list.get(i-1), ",");
+                // 第 i1 个附件
+                for (int i1 = 0; i1 < ans_file.size(); i1++) {
+                    System.out.println("    获取第" + i1+1 + "个文件");
+                    String fileName = ans_file.get(i1);
+                    File src = new File(filePath+File.separator + fileName);
+                    String substring = fileName.substring(fileName.lastIndexOf("_")+1);
+                    String fileOriginName = substring.substring(substring.lastIndexOf("_")+1);
+                    File dst = new File( tmpFilePath +File.separator + sw.getUid()+"_" + sw.getUsername() +"_第"+i+"题_" + fileOriginName);
+                    if(!dst.getParentFile().isDirectory()){
+                        dst.getParentFile().mkdirs();
+                    }
+                    try {
+                        FileCopyUtils.copy(src,dst);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        try {
+            return fileUtil.fileToZip(tmpFilePath, tempPath+File.separator + "downloadZipTemp" + File.separator,wid+".zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 import com.teee.utils.JWT;
 import com.teee.utils.Tencent;
 import com.teee.utils.TypeChange;
+import com.teee.utils.fileUtil;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
@@ -9,6 +10,7 @@ import com.tencentcloudapi.iai.v20200303.IaiClient;
 import com.tencentcloudapi.iai.v20200303.models.*;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class javaTest {
@@ -36,8 +38,11 @@ public class javaTest {
 
     @Test
     public void str(){
-        String s = "http://127.0.0.1:8080/face/1670823306430.png";
-        System.out.println(s.substring(s.lastIndexOf("/")));
+        String str = "[{\\\"qtype\\\":30011,\\\"qscore\\\":\\\"5\\\",\\\"qtext\\\":\\\"4\\\",\\\"cans\\\":\\\"5\\\"}]";
+        System.out.println(str);
+        String s = str.replaceAll(",\\\\\\\"cans\\\\\\\":\\\\\\\".+\\\\\"", "");
+        System.out.println(s);
+
     }
 
     @Test
@@ -84,5 +89,15 @@ public class javaTest {
     @Test
     public void tencentTest2(){
         new Tencent().faceCheck("","");
+    }
+
+
+    @Test
+    public void zipTest(){
+        try {
+            fileUtil.fileToZip("D:\\testfile\\ziptest","D:\\testfile\\ziptest\\","压缩.zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

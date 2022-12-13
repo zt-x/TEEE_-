@@ -10,14 +10,24 @@ import com.teee.domain.Course;
 import com.teee.domain.returnClass.BooleanReturn;
 import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.*;
+import com.teee.service.Course.CourseService;
 import com.teee.service.HomeWork.Exams.ExamService;
 import com.teee.utils.JWT;
 import com.teee.utils.SpringBeanUtil;
 import com.teee.utils.TypeChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,6 +43,8 @@ public class WorkControllerImpl implements WorkController {
     WorkTimerDao workTimerDao;
     @Autowired
     ExamService examService;
+    @Autowired
+    CourseService courseService;
 
 
     @Override
@@ -90,7 +102,11 @@ public class WorkControllerImpl implements WorkController {
                     if(bankWork == null){
                         return new Result(Code.ERR, null,"作业内容不存在");
                     }else{
-                        return new Result(Code.Suc, bankWork.getQuestions(),"获取成功");
+                        // 去除CANS:
+                        //
+//                        String bakQue = bankWork.getQuestions().replaceAll(",\\\"cans\\\"")
+                        String bakQue = bankWork.getQuestions().replaceAll(",\\\\\\\"cans\\\\\\\":\\\\\\\".+\\\\\"", "");
+                        return new Result(Code.Suc,bakQue,"获取成功");
                     }
                 }catch (Exception e){
                     return new Result(Code.ERR, null,"WorkContImpl.getWork Err:" + e.getMessage());
@@ -237,4 +253,42 @@ public class WorkControllerImpl implements WorkController {
         return new Result(Code.ERR, e.getMessage(), "规则添加失败");
         }
     }
+
+
+    @Override
+    @RequestMapping("/Work/downloadFiles")
+    @ResponseBody
+    public Result downloadFiles(@RequestParam("wid") Integer wid, HttpServletResponse response){
+        // 打包File
+        File file = courseService.packageFile(wid);
+        if(file == null || !file.exists()){
+            return new Result(Code.ERR, null,"打包失败");
+        }else{
+            String workName = aWorkDao.selectById(wid).getWorkName();
+
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy年MM月dd日'_'HH'时'mm'分'");
+            Date date = new Date(System.currentTimeMillis());
+            System.out.println();
+            response.reset();
+            response.setContentType("application/octet-stream");
+            response.setCharacterEncoding("utf-8");
+            response.setContentLength((int)file.length());
+            try {
+                response.setHeader("Content-Disposition", URLEncoder.encode("附件打包_" + workName + "_" +formatter.format(date) + ".zip", "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                byte[] bytes = FileCopyUtils.copyToByteArray(file);
+                OutputStream os = response.getOutputStream();
+                os.write(bytes);
+//            return new Result(Code.Suc, null, "下载启动成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new Result(Code.ERR, null, "下载启动失败");
+            }
+        }
+        return null;
+    }
+
 }

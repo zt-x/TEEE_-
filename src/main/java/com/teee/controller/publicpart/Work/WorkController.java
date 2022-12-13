@@ -4,6 +4,8 @@ import com.teee.domain.returnClass.Result;
 import com.teee.domain.works.AWork;
 import com.teee.domain.works.WorkExamRule;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Xu ZhengTao
  */
@@ -18,5 +20,5 @@ public interface WorkController {
     Result setRules(WorkExamRule workExamRule);
     Result getExamRulePre(Integer wid);
     Result getExamRuleEnter(Integer wid);
-
+    Result downloadFiles(Integer wid, HttpServletResponse response);
 }
