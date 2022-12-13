@@ -5,6 +5,4 @@ target/
 .DS_Store
 .idea
 *.iml
-*.yml
-*.serve
 /target/
