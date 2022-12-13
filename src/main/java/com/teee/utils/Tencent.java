@@ -48,8 +48,8 @@ public class Tencent {
             CompareFaceRequest req = new CompareFaceRequest();
             System.out.println("URL1: " + fileUrl1);
             System.out.println("URL2: " + fileUrl2);
-            req.setImageA(TypeChange.getImageBaseURL(fileUrl1));
-            req.setImageB(TypeChange.getImageBaseURL(fileUrl2));
+            req.setImageA(TypeChange.getImgBaseFile(fileUrl1));
+            req.setImageB(TypeChange.getImgBaseFile(fileUrl2));
             // 返回的resp是一个CompareFaceResponse的实例，与请求对象对应
             CompareFaceResponse resp = null;
             resp = client.CompareFace(req);

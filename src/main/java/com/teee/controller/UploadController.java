@@ -66,7 +66,7 @@ public class UploadController {
         if(uploadResult.getUploaded() == 0){
             return new Result(Code.ERR, uploadResult.getError());
         }else{
-            SpringBeanUtil.getBean(UserService.class).setFace(JWT.getUid(token), uploadResult.getUrl());
+            SpringBeanUtil.getBean(UserService.class).setFace(JWT.getUid(token),facePath + File.separator+uploadResult.getFileName());
             return new Result(Code.Suc,null, "上传成功");
         }
     }
@@ -78,7 +78,7 @@ public class UploadController {
         if(uploadResult.getUploaded() == 0){
             return new Result(Code.ERR, uploadResult.getError());
         }else{
-            BooleanReturn faceCheck = SpringBeanUtil.getBean(ExamService.class).faceCheck(JWT.getUid(token), uploadResult.getUrl());
+            BooleanReturn faceCheck = SpringBeanUtil.getBean(ExamService.class).faceCheck(JWT.getUid(token),tempPath + File.separator + uploadResult.getFileName());
             if(faceCheck.isSuccess()){
                 return new Result(Code.Suc,null,"验证通过");
             }else{
@@ -134,7 +134,7 @@ public class UploadController {
             file.transferTo(new File(path+File.separator+uploadFile));
             String url = request.getScheme() + "://" + request.getServerName() + ":" + port + "/" + dirName + "/" + uploadFile;
             System.out.println("url=" + url);
-            return new UploadResult(1, "",url);
+            return new UploadResult(1, uploadFile,url);
         } catch (IOException e) {
             e.printStackTrace();
             return new UploadResult(0, new UploadErr("上传失败"));

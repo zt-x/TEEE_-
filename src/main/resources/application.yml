@@ -21,10 +21,6 @@ logging:
     root: info
   file:
     name: /usr/local/TEEELog/log.log
-#path:
-#  picPath: D:/testpic/
-#  filePath: D:/testfile/
-#  facePath: D:/testFace/
 realMaxFileSizeMB: 50
 Tencent:
   secretId: AKIDjU6ZMxWiookaLzXjrsjPtAIG3hEbopWE
