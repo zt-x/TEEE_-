@@ -2,6 +2,7 @@ package com.teee.service.publicpart.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.teee.config.Code;
 import com.teee.dao.UserInfoDao;
 import com.teee.domain.LoginData;
 import com.teee.domain.UserInfo;
@@ -37,13 +38,13 @@ public class PowerServiceImpl implements PowerService {
     public ArrayList<JSONObject> getRouter(String role) {
         RouterFactory rf = new RouterFactory();
         ArrayList<JSONObject> routers = new ArrayList<>();
-        if("admin".equals(role)){
+        if(Code.Admin.equals(role)){
             routers.add(rf.getRouterObject("Admin临时注册机😆", "/register", "Register.vue", "fa fa-camera", true));
-        }else if("student".equals(role)){
+        }else if(Code.Student.equals(role)){
             routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt", true));
             routers.add(rf.getRouterObject("统计数据", "/Statistics", "StatisticsView.vue", "fas fa-bar-chart", true));
             routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
-        }else if("teacher".equals(role)){
+        }else if(Code.Teacher.equals(role)){
             routers.add(rf.getRouterObject("我的课程", "/Course", "CourseView.vue", "fas fa fa-list-alt", true));
             routers.add(rf.getRouterObject("CourseContent", "/CourseContent", "CourseContent.vue", "", false));
             routers.add(rf.getRouterObject("WorkContent", "/WorkContent", "Course/AWorkContent.vue", "", false));

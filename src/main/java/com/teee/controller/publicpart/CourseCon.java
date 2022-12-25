@@ -35,9 +35,9 @@ public class CourseCon {
     @RequestMapping("/Course/getMyCourse")
     @ResponseBody
     public Result getMyCourse(@RequestHeader("Authorization") String token){
-        if(JWT.getRole(token).equals("teacher")){
+        if(JWT.getRole(token).equals(Code.Teacher)){
             return teacherCourseController.getMyCourses(token);
-        }else if(JWT.getRole(token).equals("student")){
+        }else if(JWT.getRole(token).equals(Code.Student)){
             return courseController.getMyCourses(token);
         }else{
             return new Result(Code.ERR,null, "身份错误");
@@ -171,7 +171,7 @@ public class CourseCon {
                 Long uid = JWT.getUid(token);
                 //  获取历次作业
                 JSONArray scores = new JSONArray();
-                if(role.equals("teacher")){
+                if(role.equals(Code.Teacher)){
                     // 获取历次作业的平均成绩
                     for (AWork object : objects) {
                         if(object.getIsExam() == 0){
@@ -187,7 +187,7 @@ public class CourseCon {
                             scores.add(jo);
                         }
                     }
-                }else if(role.equals("student")){
+                }else if(role.equals(Code.Student)){
                     // 获取历次作业的成绩
                     for (AWork object : objects) {
                         if(object.getIsExam() == 0){

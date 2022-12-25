@@ -102,6 +102,7 @@ public class BankControllerImpl implements BankController {
     @ResponseBody
     public Result addWorkBank(@RequestHeader("Authorization") String token, @RequestBody BankWork bankWork) {
         Long tid = JWT.getUid(token);
+        System.out.println("TID = " + tid);
         BooleanReturn ret = workBankService.createWorkBank(bankWork, tid);
         if(ret.isSuccess()){
             return new Result(Code.Suc, ret.getData(), ret.getMsg());

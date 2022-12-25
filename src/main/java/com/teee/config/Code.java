@@ -1,6 +1,11 @@
 package com.teee.config;
 
 public class Code {
+    // 身份
+    public static final String Teacher = "teacher";
+    public static final String Student = "student";
+    public static final String Admin = "admin";
+
     // Token 失效
     public static final Integer Token_Illegal = 00000;
     //未定义异常

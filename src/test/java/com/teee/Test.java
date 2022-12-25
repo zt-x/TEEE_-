@@ -3,6 +3,7 @@ package com.teee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.teee.config.Code;
 import com.teee.controller.publicpart.Work.Impl.WorkControllerImpl;
 import com.teee.dao.AWorkDao;
 import com.teee.dao.CourseDao;
@@ -51,7 +52,7 @@ public class Test {
 
     @org.junit.Test
     public void getRouter(){
-        String role = "student";
+        String role = Code.Student;
     }
 
     //illegal Token
