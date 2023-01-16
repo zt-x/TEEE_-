@@ -1,4 +1,7 @@
 # <img width="25px" src="https://user-images.githubusercontent.com/73433437/195987108-7c6d832b-cf98-4967-a18b-f191f5374f29.png"></img> TEEE学习平台 
+
+**【*】为优化项目结构，此项目于2023.1.16日起停止维护更新，后续版本请移步于:**
+
 **【*】此为后端部分，前端部分仓库地址https://github.com/DearXuZ/TEEE**
 
 
